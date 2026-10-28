@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareerPilot Platform</title>
+    <title>CareerPilot Platform — Interactive Web Demo</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,8 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #090e17 0%, #111a2e 100%);
             color: #ffffff;
             min-height: 100vh;
             padding: 20px;
@@ -23,336 +23,848 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #10b981;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .back-nav:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
         
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.3rem;
+            margin-bottom: 8px;
             background: linear-gradient(45deg, #10b981, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
         .header p {
-            color: #a0a0a0;
-            font-size: 1.1rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .tech-stack {
+        .badges-bar {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 15px 0;
             flex-wrap: wrap;
         }
         
         .tech-badge {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 5px 15px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            color: #34d399;
         }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
+
+        /* Navigation Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 4px;
         }
-        
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
-        }
-        
-        .feature-card h3 {
-            color: #10b981;
-            margin-bottom: 15px;
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 10px 18px;
+            border-radius: 10px 10px 0 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
+            gap: 8px;
+            white-space: nowrap;
         }
-        
-        .feature-card p {
-            color: #a0a0a0;
+        .tab-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .tab-btn.active {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            border-bottom: 2px solid #10b981;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
             margin-bottom: 20px;
-            line-height: 1.6;
         }
-        
-        .demo-button {
+
+        /* Form Styles */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 800px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            background: #090e18;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            border-color: #10b981;
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .btn {
             background: linear-gradient(45deg, #10b981, #3b82f6);
             border: none;
             color: white;
-            padding: 12px 25px;
+            padding: 10px 22px;
             border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
-            margin: 5px;
-            transition: transform 0.3s ease;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .demo-button:hover {
-            transform: scale(1.05);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
-        
-        .demo-section {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        
-        .demo-section h2 {
-            color: #10b981;
-            margin-bottom: 20px;
-            text-align: center;
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
         }
-        
-        .resume-builder {
-            background: rgba(0, 0, 0, 0.3);
+
+        /* ATS Score Widget */
+        .score-widget {
+            background: #08111e;
             border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 10px;
+            border-radius: 14px;
             padding: 20px;
-            margin: 20px 0;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
         }
-        
-        .form-group {
-            margin-bottom: 15px;
+        .score-dial {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 6px solid #10b981;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #34d399;
+            flex-shrink: 0;
         }
-        
-        .form-group label {
-            display: block;
-            color: #10b981;
-            margin-bottom: 5px;
+        .score-dial span {
+            font-size: 0.65rem;
             font-weight: 500;
+            color: #94a3b8;
+            margin-top: -3px;
         }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            color: white;
+        .score-details {
+            flex: 1;
+            min-width: 250px;
+        }
+        .score-details h4 {
+            font-size: 1.05rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .score-breakdown-list {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        /* Job Portal Styles */
+        .job-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .job-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(59, 130, 246, 0.04);
+        }
+        .job-info h4 {
             font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 3px;
         }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
+        .job-company {
+            font-size: 0.8rem;
+            color: #60a5fa;
+            margin-bottom: 6px;
         }
-        
-        .ats-score {
-            background: rgba(16, 185, 129, 0.1);
+        .job-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .job-tag {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .applied-badge {
+            font-size: 0.75rem;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 4px 10px;
+            border-radius: 12px;
             border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
         }
-        
-        .score-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #10b981;
+
+        /* Quiz Styles */
+        .quiz-question-box {
+            background: #090e18;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
-        
-        .score-label {
-            color: #a0a0a0;
-            margin-top: 5px;
+        .quiz-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
         }
-        
-        .github-link {
-            text-align: center;
-            margin: 30px 0;
+        .quiz-option {
+            display: block;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        
-        .github-link a {
-            color: #10b981;
-            text-decoration: none;
-            font-size: 1.1rem;
+        .quiz-option:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.08);
         }
-        
-        .github-link a:hover {
-            text-decoration: underline;
+        .quiz-option.selected {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        /* Resume Print Preview modal */
+        #resumePreviewModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 30px 20px;
+        }
+        .resume-paper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            color: #111827;
+            padding: 40px;
+            border-radius: 8px;
+            font-family: 'Times New Roman', Times, serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/projects/careerpilot-platform" class="back-nav">
+            ← Back to Project Details & Source
+        </a>
+
         <div class="header">
             <h1>CareerPilot Platform</h1>
-            <p>A comprehensive career development platform featuring AI resume building, job search, career guidance, and technical assessments.</p>
-            <div class="tech-stack">
+            <p>Comprehensive career acceleration suite: Algorithmic ATS Resume Scorer, Curated Job Portal, Technical Assessments, and Export Engine.</p>
+            <div class="badges-bar">
                 <span class="tech-badge">Python</span>
                 <span class="tech-badge">Flask</span>
                 <span class="tech-badge">SQLAlchemy</span>
-                <span class="tech-badge">Tailwind CSS</span>
-                <span class="tech-badge">AI</span>
+                <span class="tech-badge">Algorithmic ATS Scorer</span>
+                <span class="tech-badge">Print / PDF Export</span>
             </div>
         </div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>📄 AI Resume Builder</h3>
-                <p>Create ATS-friendly resumes with AI suggestions, real-time optimization, and multiple professional templates with export capabilities.</p>
-                <button class="demo-button" onclick="openResumeBuilder()">Try Resume Builder</button>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🧭 Career Guidance</h3>
-                <p>AI-powered career counseling with personalized recommendations, skill gap analysis, and industry trend insights.</p>
-                <button class="demo-button" onclick="openCareerGuidance()">Get Career Advice</button>
-            </div>
-            
-            <div class="feature-card">
-                <h3>💼 Job Portal</h3>
-                <p>Curated job listings with application tracking, freelance opportunities, and intelligent job matching algorithms.</p>
-                <button class="demo-button" onclick="openJobPortal()">Browse Jobs</button>
-            </div>
-            
-            <div class="feature-card">
-                <h3>📝 Technical Quiz</h3>
-                <p>Skill evaluation tests with performance analytics, industry-specific assessments, and personalized learning recommendations.</p>
-                <button class="demo-button" onclick="openQuiz()">Take Assessment</button>
-            </div>
+        <!-- Navigation Tabs -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('tabResume')">
+                <span>📄 AI Resume Builder & ATS Scorer</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tabJobs')">
+                <span>💼 Job Portal & Applications</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tabQuiz')">
+                <span>📝 Technical Skill Assessment</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tabGuidance')">
+                <span>🧭 Career Path Advisor</span>
+            </button>
         </div>
 
-        <div class="demo-section">
-            <h2>🚀 Interactive Resume Builder Demo</h2>
-            <div class="resume-builder">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <!-- TAB 1: RESUME BUILDER & ATS SCORER -->
+        <div id="tabResume" class="tab-pane active">
+            <div class="card">
+                <h3 style="font-size: 1.15rem; margin-bottom: 16px; color: #10b981;">
+                    Interactive Resume Builder & Real ATS Analysis
+                </h3>
+
+                <div class="grid-2">
                     <div>
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" id="fullName" placeholder="John Doe" />
+                            <input type="text" id="rName" class="form-control" value="Nikhil Kumar" placeholder="Your Name" />
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="email" placeholder="john@example.com" />
+                            <label>Email Address</label>
+                            <input type="email" id="rEmail" class="form-control" value="nikuluhach.86209@gmail.com" placeholder="email@example.com" />
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
-                            <input type="tel" id="phone" placeholder="+1 (555) 123-4567" />
+                            <label>Phone Number</label>
+                            <input type="tel" id="rPhone" class="form-control" value="+91 7297072067" placeholder="+1 555-0123" />
+                        </div>
+                        <div class="form-group">
+                            <label>Target Role</label>
+                            <input type="text" id="rRole" class="form-control" value="Software Engineer | Python Developer | Cloud Engineer" placeholder="Target Title" />
                         </div>
                     </div>
+
                     <div>
                         <div class="form-group">
                             <label>Professional Summary</label>
-                            <textarea id="summary" placeholder="Experienced software developer with expertise in..."></textarea>
+                            <textarea id="rSummary" class="form-control" placeholder="Brief career overview...">Engineering student passionate about building scalable Python services, cloud infrastructure management, and Generative AI applications. Experienced in developing automated workflows, computer vision interfaces, and RESTful APIs.</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Job Title</label>
-                            <input type="text" id="jobTitle" placeholder="Senior Software Engineer" />
+                            <label>Technical Skills (comma-separated)</label>
+                            <textarea id="rSkills" class="form-control" placeholder="Skills list...">Python, JavaScript, Next.js, React, Flask, AWS EC2, S3, Docker, Linux, OpenCV, MediaPipe, Git, REST APIs, MySQL, SQLite</textarea>
                         </div>
                     </div>
                 </div>
-                
-                <div style="margin-top: 20px;">
-                    <button class="demo-button" onclick="analyzeResume()">Analyze with AI</button>
-                    <button class="demo-button" onclick="generateResume()">Generate Resume</button>
-                    <button class="demo-button" onclick="exportResume()">Export PDF</button>
+
+                <div class="form-group">
+                    <label>Key Project or Experience Bullet Points</label>
+                    <textarea id="rExp" class="form-control" style="min-height: 80px;" placeholder="Action verb bullet points...">• Engineered real-time hand gesture detection system using MediaPipe and OpenCV, automating desktop application workflows.
+• Developed Conversational GenAI assistant using Google Gemini API with multi-model support and secure token handling.
+• Provisioned and audited AWS EC2 instances, automated server scripts, and hardened Docker container deployments.</textarea>
                 </div>
-                
-                <div class="ats-score" id="atsScore" style="display: none;">
-                    <div class="score-value" id="scoreValue">92</div>
-                    <div class="score-label">ATS Compatibility Score</div>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn" onclick="calculateATSScore()">
+                        <span>📊 Analyze ATS Compatibility</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="openPrintPreview()">
+                        <span>🖨️ Export Printable Resume / PDF</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetResumeFields()">
+                        <span>🔄 Reset to Sample</span>
+                    </button>
+                </div>
+
+                <!-- ATS Scorecard -->
+                <div id="atsScorecard" class="score-widget" style="display: none;">
+                    <div class="score-dial" id="scoreDial">
+                        <span id="scoreValue">88</span>
+                        <span>/ 100</span>
+                    </div>
+                    <div class="score-details">
+                        <h4 id="scoreStatus">Great ATS Readiness!</h4>
+                        <div class="score-breakdown-list" id="scoreFeedback">
+                            <!-- Injected by calculateATSScore -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="github-link">
-            <a href="https://github.com/TheNikhilLuhach" target="_blank">
-                🔗 View Full Project on GitHub
-            </a>
+        <!-- TAB 2: JOB PORTAL -->
+        <div id="tabJobs" class="tab-pane">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="font-size: 1.15rem; color: #38bdf8;">
+                        Curated Tech Jobs & Application Tracker
+                    </h3>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="jobSearchInput" class="form-control" placeholder="Filter by skill (Python, Cloud, React)..." style="width: 260px;" oninput="filterJobs()" />
+                    </div>
+                </div>
+
+                <div id="jobsList">
+                    <!-- Jobs populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: TECHNICAL QUIZ ASSESSMENT -->
+        <div id="tabQuiz" class="tab-pane">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h3 style="font-size: 1.15rem; color: #a78bfa;">Technical Evaluation Quiz</h3>
+                        <p style="font-size: 0.8rem; color: #94a3b8;">Test your CS, Python, and Cloud fundamentals</p>
+                    </div>
+                    <span id="quizScoreBadge" style="font-size: 0.85rem; padding: 4px 12px; background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 12px; color: #c4b5fd;">
+                        Progress: 0 / 4 Completed
+                    </span>
+                </div>
+
+                <div id="quizContainer">
+                    <!-- Questions populated by JS -->
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <button class="btn" onclick="submitQuiz()">Submit Assessment</button>
+                    <button class="btn btn-secondary" onclick="resetQuiz()">Reset Quiz</button>
+                </div>
+                <div id="quizResults" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; background: #08121f; border: 1px solid #10b981;"></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: CAREER GUIDANCE -->
+        <div id="tabGuidance" class="tab-pane">
+            <div class="card">
+                <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: #f59e0b;">
+                    🧭 Career Track Roadmap Advisor
+                </h3>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px;">
+                    Select your target specialization to see recommended learning milestones, production projects, and interview focus areas.
+                </p>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button class="btn btn-secondary" onclick="showTrack('devops')">☁️ Cloud & DevOps Engineer</button>
+                    <button class="btn btn-secondary" onclick="showTrack('python')">🐍 Python / Backend Specialist</button>
+                    <button class="btn btn-secondary" onclick="showTrack('genai')">🤖 Generative AI & Automation</button>
+                    <button class="btn btn-secondary" onclick="showTrack('fullstack')">⚡ Full-Stack Web Developer</button>
+                </div>
+
+                <div id="trackContent" style="background: #090f1d; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px;">
+                    <!-- Track Details -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Print Preview Modal -->
+    <div id="resumePreviewModal">
+        <div style="max-width: 800px; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center;">
+            <button class="btn" onclick="window.print()">🖨️ Print to PDF</button>
+            <button class="btn btn-secondary" onclick="closePrintPreview()">✕ Close Preview</button>
+        </div>
+        <div class="resume-paper" id="printableResume">
+            <!-- Populated on open -->
         </div>
     </div>
 
     <script>
-        function openResumeBuilder() {
-            alert('📄 Resume Builder: This would open the full resume creation interface with templates, AI suggestions, and real-time editing.');
-        }
-
-        function openCareerGuidance() {
-            alert('🧭 Career Guidance: This would start an AI chat session for personalized career advice and skill recommendations.');
-        }
-
-        function openJobPortal() {
-            alert('💼 Job Portal: This would display curated job listings with filters and application tracking.');
-        }
-
-        function openQuiz() {
-            alert('📝 Technical Quiz: This would start skill assessment tests with performance analytics.');
-        }
-
-        function analyzeResume() {
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const summary = document.getElementById('summary').value;
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            if (!fullName || !email || !summary) {
-                alert('Please fill in the basic information first!');
-                return;
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- TAB 1: REAL ATS SCORING ALGORITHM ---
+        function calculateATSScore() {
+            const name = document.getElementById('rName').value.trim();
+            const email = document.getElementById('rEmail').value.trim();
+            const phone = document.getElementById('rPhone').value.trim();
+            const role = document.getElementById('rRole').value.trim();
+            const summary = document.getElementById('rSummary').value.trim();
+            const skills = document.getElementById('rSkills').value.trim();
+            const exp = document.getElementById('rExp').value.trim();
+
+            let score = 0;
+            const feedback = [];
+
+            // 1. Contact Completeness (20 pts)
+            if (name.length > 2) score += 5; else feedback.push('❌ Add full name.');
+            if (/\S+@\S+\.\S+/.test(email)) { score += 10; } else { feedback.push('❌ Enter a valid email address.'); }
+            if (phone.length >= 8) score += 5; else feedback.push('❌ Add a contact telephone number.');
+
+            // 2. Target Role & Summary (20 pts)
+            if (role.length > 5) score += 5; else feedback.push('⚠️ Specify a distinct target job title.');
+            const summaryWords = summary.split(/\s+/).filter(Boolean).length;
+            if (summaryWords >= 20 && summaryWords <= 80) {
+                score += 15;
+            } else if (summaryWords > 5) {
+                score += 8;
+                feedback.push('⚠️ Summary length is short. Aim for 30–60 words highlighting core strengths.');
+            } else {
+                feedback.push('❌ Add a comprehensive professional summary.');
             }
-            
-            // Show ATS score
-            const atsScore = document.getElementById('atsScore');
-            const scoreValue = document.getElementById('scoreValue');
-            
-            // Generate random score between 85-98
-            const score = Math.floor(Math.random() * 14) + 85;
-            scoreValue.textContent = score;
-            atsScore.style.display = 'block';
-            
-            // Animate the score
-            let currentScore = 0;
-            const increment = score / 50;
-            const timer = setInterval(() => {
-                currentScore += increment;
-                if (currentScore >= score) {
-                    currentScore = score;
-                    clearInterval(timer);
-                }
-                scoreValue.textContent = Math.floor(currentScore);
-            }, 20);
-        }
 
-        function generateResume() {
-            alert('🎨 AI Resume Generator: This would use AI to enhance your resume content based on industry standards and job requirements.');
-        }
-
-        function exportResume() {
-            alert('📄 Export Options: This would show export options for PDF, DOCX, and other formats with professional formatting.');
-        }
-
-        // Add interactive form validation
-        document.querySelectorAll('input, textarea').forEach(field => {
-            field.addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.style.borderColor = 'rgba(16, 185, 129, 0.5)';
-                } else {
-                    this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                }
+            // 3. Technical Skills Keyword Density (30 pts)
+            const techKeywords = ['python', 'javascript', 'next.js', 'react', 'aws', 'docker', 'linux', 'sql', 'git', 'api', 'fastapi', 'flask'];
+            const lowerSkills = skills.toLowerCase();
+            let matches = 0;
+            techKeywords.forEach(k => {
+                if (lowerSkills.includes(k)) matches++;
             });
-        });
+            const skillScore = Math.min(30, matches * 4);
+            score += skillScore;
+            if (matches < 5) feedback.push(`⚠️ Found only ${matches} industry core keywords. Consider adding tools like Docker, Git, AWS, or REST APIs.`);
+
+            // 4. Action Verbs in Experience (30 pts)
+            const actionVerbs = ['engineered', 'developed', 'architected', 'built', 'automated', 'implemented', 'optimized', 'designed', 'managed', 'configured'];
+            const lowerExp = exp.toLowerCase();
+            let verbMatches = 0;
+            actionVerbs.forEach(v => {
+                if (lowerExp.includes(v)) verbMatches++;
+            });
+            const expScore = Math.min(30, verbMatches * 6);
+            score += expScore;
+            if (verbMatches < 3) feedback.push('⚠️ Use strong action verbs in your bullet points (e.g., "Engineered", "Automated", "Architected").');
+
+            // Render Results
+            const scorecard = document.getElementById('atsScorecard');
+            const scoreValue = document.getElementById('scoreValue');
+            const scoreStatus = document.getElementById('scoreStatus');
+            const scoreFeedback = document.getElementById('scoreFeedback');
+
+            scoreValue.textContent = score;
+            scorecard.style.display = 'flex';
+
+            if (score >= 80) {
+                scoreStatus.textContent = '🟢 Excellent ATS Readiness!';
+                scoreStatus.style.color = '#34d399';
+            } else if (score >= 60) {
+                scoreStatus.textContent = '🟡 Moderate ATS Compatibility — Action Items Below';
+                scoreStatus.style.color = '#facc15';
+            } else {
+                scoreStatus.textContent = '🔴 Low ATS Score — Missing Critical Sections';
+                scoreStatus.style.color = '#f87171';
+            }
+
+            if (feedback.length === 0) {
+                scoreFeedback.innerHTML = '✅ All core ATS heuristics verified: Strong keyword density, valid contact tokens, and action-verb metrics.';
+            } else {
+                scoreFeedback.innerHTML = feedback.map(f => `<div>${f}</div>`).join('');
+            }
+        }
+
+        function resetResumeFields() {
+            document.getElementById('rName').value = 'Nikhil Kumar';
+            document.getElementById('rEmail').value = 'nikuluhach.86209@gmail.com';
+            document.getElementById('rPhone').value = '+91 7297072067';
+            document.getElementById('rRole').value = 'Software Engineer | Python Developer | Cloud Engineer';
+            document.getElementById('rSummary').value = 'Engineering student passionate about building scalable Python services, cloud infrastructure management, and Generative AI applications.';
+            document.getElementById('rSkills').value = 'Python, JavaScript, Next.js, React, Flask, AWS EC2, S3, Docker, Linux, OpenCV, MediaPipe, Git, REST APIs, MySQL, SQLite';
+            document.getElementById('rExp').value = '• Engineered real-time hand gesture detection system using MediaPipe and OpenCV.\n• Developed Conversational GenAI assistant using Google Gemini API.\n• Provisioned and audited AWS EC2 instances and automated Docker deployments.';
+            document.getElementById('atsScorecard').style.display = 'none';
+        }
+
+        function openPrintPreview() {
+            const name = document.getElementById('rName').value;
+            const email = document.getElementById('rEmail').value;
+            const phone = document.getElementById('rPhone').value;
+            const role = document.getElementById('rRole').value;
+            const summary = document.getElementById('rSummary').value;
+            const skills = document.getElementById('rSkills').value;
+            const exp = document.getElementById('rExp').value;
+
+            const html = `
+                <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 16px;">
+                    <h1 style="font-size: 24px; margin-bottom: 4px; text-transform: uppercase;">${name}</h1>
+                    <div style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">${role}</div>
+                    <div style="font-size: 12px; color: #444;">${email} | ${phone} | Jaipur, Rajasthan, India</div>
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <h3 style="font-size: 13px; border-bottom: 1px solid #777; text-transform: uppercase; margin-bottom: 6px;">Professional Summary</h3>
+                    <p style="font-size: 12px; line-height: 1.5;">${summary}</p>
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <h3 style="font-size: 13px; border-bottom: 1px solid #777; text-transform: uppercase; margin-bottom: 6px;">Technical Skills</h3>
+                    <p style="font-size: 12px; line-height: 1.5;">${skills}</p>
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <h3 style="font-size: 13px; border-bottom: 1px solid #777; text-transform: uppercase; margin-bottom: 6px;">Experience & Projects</h3>
+                    <div style="font-size: 12px; line-height: 1.6; white-space: pre-line;">${exp}</div>
+                </div>
+            `;
+
+            document.getElementById('printableResume').innerHTML = html;
+            document.getElementById('resumePreviewModal').style.display = 'block';
+        }
+
+        function closePrintPreview() {
+            document.getElementById('resumePreviewModal').style.display = 'none';
+        }
+
+        // --- TAB 2: JOB PORTAL WITH APPLICATION TRACKER ---
+        const sampleJobs = [
+            { id: 1, title: 'Python Backend Engineer', company: 'CloudScale Technologies', type: 'Full-time', location: 'Remote / Bengaluru', skills: ['Python', 'Flask', 'REST APIs', 'PostgreSQL'], applied: false },
+            { id: 2, title: 'DevOps & Cloud Associate', company: 'Infracore Systems', type: 'Full-time', location: 'Remote / Delhi NCR', skills: ['AWS', 'Docker', 'Linux', 'CI/CD'], applied: false },
+            { id: 3, title: 'Generative AI Developer', company: 'NextGen AI Labs', type: 'Internship', location: 'Remote', skills: ['Gemini API', 'Python', 'Streamlit', 'NLP'], applied: false },
+            { id: 4, title: 'Full Stack Next.js Engineer', company: 'Pulse Interactive', type: 'Full-time', location: 'Remote / Jaipur', skills: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript'], applied: false },
+            { id: 5, title: 'Computer Vision Research Intern', company: 'Acuity Vision', type: 'Internship', location: 'Remote', skills: ['OpenCV', 'MediaPipe', 'Python'], applied: false }
+        ];
+
+        function renderJobs(list) {
+            const container = document.getElementById('jobsList');
+            container.innerHTML = list.map(job => `
+                <div class="job-card">
+                    <div class="job-info">
+                        <h4>${job.title}</h4>
+                        <div class="job-company">${job.company} • ${job.location} • <span style="color: #cbd5e1;">${job.type}</span></div>
+                        <div class="job-tags">
+                            ${job.skills.map(s => `<span class="job-tag">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        ${job.applied 
+                            ? `<span class="applied-badge">✓ Application Submitted</span>` 
+                            : `<button class="btn btn-secondary" onclick="applyToJob(${job.id})" style="font-size: 0.8rem; padding: 6px 14px;">Apply Now</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterJobs() {
+            const q = document.getElementById('jobSearchInput').value.toLowerCase();
+            const filtered = sampleJobs.filter(j => 
+                j.title.toLowerCase().includes(q) || 
+                j.company.toLowerCase().includes(q) ||
+                j.skills.some(s => s.toLowerCase().includes(q))
+            );
+            renderJobs(filtered);
+        }
+
+        function applyToJob(id) {
+            const job = sampleJobs.find(j => j.id === id);
+            if (job) {
+                job.applied = true;
+                filterJobs();
+            }
+        }
+
+        // --- TAB 3: TECHNICAL QUIZ ---
+        const quizData = [
+            {
+                q: '1. In Python, what does the __init__ method do in a class definition?',
+                options: ['Initializes a new instance of the class (constructor)', 'Destroys the object on garbage collection', 'Compiles bytecode to machine language', 'Imports external package modules'],
+                correct: 0,
+                explanation: '__init__ is the initializer / constructor executed automatically when a new class instance is created.'
+            },
+            {
+                q: '2. Which AWS service provides virtual server computing instances in the cloud?',
+                options: ['Amazon S3', 'Amazon EC2', 'Amazon IAM', 'Amazon CloudFront'],
+                correct: 1,
+                explanation: 'Amazon EC2 (Elastic Compute Cloud) provides scalable virtual servers.'
+            },
+            {
+                q: '3. What is the primary purpose of CSRF tokens in web frameworks like Flask and Django?',
+                options: ['Compress static assets', 'Prevent cross-site request forgery attacks', 'Encrypt database columns at rest', 'Generate sitemap XML files'],
+                correct: 1,
+                explanation: 'CSRF tokens ensure that requests originate from the authenticated user on the legitimate site, blocking malicious third-party cross-site submissions.'
+            },
+            {
+                q: '4. In Next.js 14 App Router, what does "use client" at the top of a file indicate?',
+                options: ['Marks the component and its children for client-side React rendering', 'Runs the file as a serverless database function', 'Restricts the route to mobile devices only', 'Enables CSS-in-JS compilation'],
+                correct: 0,
+                explanation: '"use client" establishes the boundary between Server Components and Client Components in React.'
+            }
+        ];
+
+        let userAnswers = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = quizData.map((item, qIdx) => `
+                <div class="quiz-question-box">
+                    <div class="quiz-title">${item.q}</div>
+                    <div>
+                        ${item.options.map((opt, oIdx) => `
+                            <div class="quiz-option ${userAnswers[qIdx] === oIdx ? 'selected' : ''}" onclick="selectAnswer(${qIdx}, ${oIdx})">
+                                ${opt}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            const count = Object.keys(userAnswers).length;
+            document.getElementById('quizScoreBadge').textContent = `Progress: ${count} / ${quizData.length} Completed`;
+        }
+
+        function selectAnswer(qIdx, oIdx) {
+            userAnswers[qIdx] = oIdx;
+            renderQuiz();
+        }
+
+        function submitQuiz() {
+            const total = quizData.length;
+            let correctCount = 0;
+            const breakdown = [];
+
+            quizData.forEach((item, idx) => {
+                const userChoice = userAnswers[idx];
+                const isCorrect = userChoice === item.correct;
+                if (isCorrect) correctCount++;
+                breakdown.push(`
+                    <div style="margin-bottom: 8px;">
+                        <strong>${item.q}</strong><br>
+                        ${isCorrect 
+                            ? `<span style="color: #34d399;">✓ Correct!</span>` 
+                            : `<span style="color: #f87171;">✕ Incorrect. Correct answer: ${item.options[item.correct]}</span>`
+                        }
+                        <div style="color: #94a3b8; font-size: 0.75rem;">${item.explanation}</div>
+                    </div>
+                `);
+            });
+
+            const percent = Math.round((correctCount / total) * 100);
+            const resultsBox = document.getElementById('quizResults');
+            resultsBox.style.display = 'block';
+            resultsBox.innerHTML = `
+                <h4 style="font-size: 1.1rem; color: #ffffff; margin-bottom: 10px;">
+                    Quiz Result: ${correctCount} / ${total} (${percent}%)
+                </h4>
+                <div style="font-size: 0.85rem; line-height: 1.5;">${breakdown.join('')}</div>
+            `;
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            document.getElementById('quizResults').style.display = 'none';
+            renderQuiz();
+        }
+
+        // --- TAB 4: CAREER TRACKS ---
+        const tracks = {
+            devops: {
+                title: '☁️ Cloud Infrastructure & DevOps Career Track',
+                skills: 'AWS (EC2, S3, IAM, VPC), Docker, Kubernetes, CI/CD (GitHub Actions), Linux Administration, Terraform',
+                projects: 'Automated multi-region EC2 disaster recovery orchestrator, Docker container security pipeline, Serverless cost monitor',
+                interviewFocus: 'Linux network troubleshooting (iptables, netstat), container lifecycle, IAM security least-privilege, pipeline automation'
+            },
+            python: {
+                title: '🐍 Python Backend Engineer Career Track',
+                skills: 'Python 3.12, FastAPI, Flask, SQLAlchemy ORM, PostgreSQL, PyTest, AsyncIO, Celery',
+                projects: 'High-throughput REST API gateway with rate-limiting, Distributed background worker system, Automated data scraper pipeline',
+                interviewFocus: 'Python data structures (lists vs sets vs dicts internals), decorators, generators, database query optimization'
+            },
+            genai: {
+                title: '🤖 Generative AI & Automation Specialist Career Track',
+                skills: 'Google Gemini API, OpenAI API, LangChain, RAG architectures, Streamlit, Vector DBs, Prompt Engineering',
+                projects: 'Multi-modal document question-answering tool, Automated code reviewer bot, Smart project ideation chatbot',
+                interviewFocus: 'Context window management, temperature & top-p tuning, structured output parsing, token billing optimization'
+            },
+            fullstack: {
+                title: '⚡ Full-Stack Web Developer Career Track',
+                skills: 'Next.js 14, React 18, TypeScript, Tailwind CSS, REST & GraphQL APIs, SQLite/PostgreSQL, Authentication',
+                projects: 'Production developer portfolio, CareerPilot platform, Collaborative study room hub',
+                interviewFocus: 'Server vs Client Component rendering, state management, web vitals optimization, accessible UI design'
+            }
+        };
+
+        function showTrack(key) {
+            const track = tracks[key];
+            document.getElementById('trackContent').innerHTML = `
+                <h4 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 8px;">${track.title}</h4>
+                <div style="margin-bottom: 10px; font-size: 0.85rem;">
+                    <strong style="color: #cbd5e1;">Core Technology Stack:</strong> <span style="color: #94a3b8;">${track.skills}</span>
+                </div>
+                <div style="margin-bottom: 10px; font-size: 0.85rem;">
+                    <strong style="color: #cbd5e1;">Recommended Resume Projects:</strong> <span style="color: #94a3b8;">${track.projects}</span>
+                </div>
+                <div style="font-size: 0.85rem;">
+                    <strong style="color: #cbd5e1;">Key Interview Focus:</strong> <span style="color: #94a3b8;">${track.interviewFocus}</span>
+                </div>
+            `;
+        }
+
+        // Initialize on load
+        renderJobs(sampleJobs);
+        renderQuiz();
+        showTrack('devops');
     </script>
 </body>
 </html>

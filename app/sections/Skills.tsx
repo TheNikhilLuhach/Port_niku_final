@@ -19,35 +19,24 @@ const skillCategories = [
     title: 'Programming Languages',
     color: 'from-accent-cyan to-accent-purple',
     skills: [
-      { name: 'Python', level: 90 },
-      { name: 'JavaScript', level: 85 },
-      { name: 'Java', level: 75 },
-      { name: 'C / C++', level: 70 },
-      { name: 'Bash/Shell', level: 65 },
+      { name: 'Python', level: 92 },
+      { name: 'JavaScript / TypeScript', level: 86 },
+      { name: 'Java', level: 78 },
+      { name: 'C / C++', level: 74 },
+      { name: 'Bash / Shell Scripting', level: 82 },
     ],
   },
   {
     icon: Globe,
-    title: 'Web Development',
+    title: 'Web & Backend Frameworks',
     color: 'from-accent-purple to-accent-pink',
     skills: [
-      { name: 'React / Next.js', level: 85 },
-      { name: 'HTML5 / CSS3', level: 90 },
+      { name: 'Next.js 14', level: 88 },
+      { name: 'React 18', level: 88 },
+      { name: 'Flask / FastAPI', level: 86 },
       { name: 'Node.js', level: 80 },
-      { name: 'Flask / FastAPI', level: 85 },
-      { name: 'REST APIs', level: 88 },
-    ],
-  },
-  {
-    icon: Wrench,
-    title: 'Tools & Platforms',
-    color: 'from-accent-pink to-accent-emerald',
-    skills: [
-      { name: 'Git & GitHub', level: 90 },
-      { name: 'Docker', level: 75 },
-      { name: 'VS Code', level: 95 },
-      { name: 'Postman', level: 85 },
-      { name: 'VirtualBox', level: 80 },
+      { name: 'RESTful APIs', level: 90 },
+      { name: 'HTML5 / CSS3 / Tailwind', level: 92 },
     ],
   },
   {
@@ -55,48 +44,61 @@ const skillCategories = [
     title: 'Cloud & DevOps',
     color: 'from-accent-emerald to-accent-cyan',
     skills: [
-      { name: 'AWS (EC2, S3, IAM)', level: 80 },
-      { name: 'Linux Server Mgmt', level: 85 },
-      { name: 'CI/CD (GitHub Actions)', level: 70 },
-      { name: 'AWS CLI', level: 75 },
+      { name: 'AWS (EC2, S3, IAM)', level: 84 },
+      { name: 'Docker Containerization', level: 80 },
+      { name: 'Linux Server Administration', level: 88 },
+      { name: 'CI/CD Pipelines (GitHub Actions)', level: 78 },
+      { name: 'AWS CLI Automation', level: 82 },
     ],
   },
   {
-    icon: Shield,
-    title: 'Cybersecurity',
-    color: 'from-accent-cyan to-accent-purple',
+    icon: Cpu,
+    title: 'AI & Computer Vision',
+    color: 'from-accent-pink to-accent-purple',
     skills: [
-      { name: 'Kali Linux', level: 85 },
-      { name: 'Burp Suite', level: 80 },
-      { name: 'Nmap / Wireshark', level: 75 },
-      { name: 'Metasploit', level: 70 },
-      { name: 'Vulnerability Analysis', level: 78 },
+      { name: 'Google Gemini API', level: 88 },
+      { name: 'Prompt Engineering', level: 90 },
+      { name: 'OpenCV', level: 82 },
+      { name: 'MediaPipe Hand Tracking', level: 84 },
+      { name: 'Streamlit & Gradio', level: 86 },
     ],
   },
   {
     icon: Database,
-    title: 'Databases',
+    title: 'Databases & Storage',
     color: 'from-accent-purple to-accent-pink',
     skills: [
-      { name: 'MongoDB', level: 85 },
-      { name: 'MySQL', level: 80 },
-      { name: 'Database Design', level: 75 },
+      { name: 'MySQL', level: 82 },
+      { name: 'SQLite & SQLAlchemy ORM', level: 86 },
+      { name: 'MongoDB', level: 80 },
+      { name: 'Relational Schema Design', level: 82 },
+    ],
+  },
+  {
+    icon: Shield,
+    title: 'Security & Developer Tools',
+    color: 'from-accent-cyan to-accent-purple',
+    skills: [
+      { name: 'Git & GitHub', level: 92 },
+      { name: 'Kali Linux & Ethical Hacking', level: 82 },
+      { name: 'Postman API Testing', level: 88 },
+      { name: 'VS Code & System Debugging', level: 94 },
     ],
   },
 ];
 
 function SkillCard({ category, index }: { category: typeof skillCategories[0]; index: number }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(index < 2); // Expand first two by default
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.1, duration: 0.6 }}
-      className="glass rounded-2xl overflow-hidden"
+      transition={{ delay: index * 0.08, duration: 0.5 }}
+      className="glass rounded-2xl overflow-hidden hover:border-accent-cyan/30 transition-all duration-300"
     >
       <button
         onClick={() => setIsExpanded(!isExpanded)}
@@ -108,10 +110,12 @@ function SkillCard({ category, index }: { category: typeof skillCategories[0]; i
               <category.icon className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h3 className="text-lg font-semibold text-white">{category.title}</h3>
+          <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-accent-cyan transition-colors">
+            {category.title}
+          </h3>
         </div>
         <ChevronRight 
-          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} 
+          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isExpanded ? 'rotate-90 text-accent-cyan' : ''}`} 
         />
       </button>
       
@@ -124,14 +128,14 @@ function SkillCard({ category, index }: { category: typeof skillCategories[0]; i
           {category.skills.map((skill, skillIndex) => (
             <div key={skill.name}>
               <div className="flex justify-between mb-1.5">
-                <span className="text-sm text-gray-300">{skill.name}</span>
-                <span className="text-sm text-accent-cyan">{skill.level}%</span>
+                <span className="text-xs sm:text-sm text-gray-300 font-medium">{skill.name}</span>
+                <span className="text-xs sm:text-sm font-mono text-accent-cyan">{skill.level}%</span>
               </div>
               <div className="h-2 bg-dark-600 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={isExpanded ? { width: `${skill.level}%` } : { width: 0 }}
-                  transition={{ delay: skillIndex * 0.1, duration: 0.6, ease: 'easeOut' }}
+                  transition={{ delay: skillIndex * 0.05, duration: 0.6, ease: 'easeOut' }}
                   className={`h-full rounded-full bg-gradient-to-r ${category.color}`}
                 />
               </div>
@@ -150,8 +154,8 @@ export default function Skills() {
   return (
     <section id="skills" className="py-24 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute top-0 left-0 w-full h-full grid-overlay opacity-30" />
-      <div className="absolute top-1/3 right-0 w-96 h-96 bg-accent-cyan/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-full h-full grid-overlay opacity-30 pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-96 h-96 bg-accent-cyan/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -169,24 +173,23 @@ export default function Skills() {
               className="inline-block px-4 py-1.5 rounded-full glass text-accent-cyan text-sm font-medium mb-4"
             >
               <Cpu className="w-4 h-4 inline mr-2" />
-              Technical Expertise
+              Technical Proficiency
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 }}
-              className="text-4xl sm:text-5xl font-bold mb-6"
+              className="text-4xl sm:text-5xl font-bold mb-6 tracking-tight"
             >
-              Skills & <span className="text-gradient">Technologies</span>
+              Skills & <span className="bg-gradient-to-r from-accent-cyan to-accent-purple bg-clip-text text-transparent">Technologies</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.4 }}
-              className="text-gray-400 max-w-2xl mx-auto"
+              className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed"
             >
-              A comprehensive toolkit spanning development, security, and cloud infrastructure.
-              Click on any category to explore detailed proficiency levels.
+              Proficiencies across core programming languages, modern web frameworks, AWS cloud infrastructure, and AI engineering.
             </motion.p>
           </div>
 

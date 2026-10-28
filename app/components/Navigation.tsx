@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Menu, X, Github, Rocket } from 'lucide-react';
+import { Menu, X, Github, Rocket, FileDown, FileCode2 } from 'lucide-react';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -100,15 +100,37 @@ export default function Navigation() {
               ))}
             </div>
 
-            {/* GitHub Button */}
-            <div className="hidden md:flex items-center gap-4">
+            {/* Resume & GitHub Buttons */}
+            <div className="hidden md:flex items-center gap-3">
+              <motion.a
+                href="/resume/Nikhil_Kumar_Resume.pdf"
+                download="Nikhil_Kumar_Resume.pdf"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-accent-cyan/20 to-accent-purple/20 border border-accent-cyan/40 text-accent-cyan hover:text-white transition-all text-sm font-medium shadow-sm hover:shadow-accent-cyan/20"
+              >
+                <FileDown className="w-4 h-4" />
+                Resume (PDF)
+              </motion.a>
+
+              <motion.a
+                href="/resume/Nikhil_Kumar_Resume.tex"
+                download="Nikhil_Kumar_Resume.tex"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-dark-700/30 border border-gray-600 text-gray-300 hover:text-white transition-all text-sm font-medium"
+              >
+                <FileCode2 className="w-4 h-4" />
+                Resume (.tex)
+              </motion.a>
+
               <motion.a
                 href="https://github.com/TheNikhilLuhach"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg glass text-gray-300 hover:text-white hover:border-accent-cyan/50 transition-all text-sm font-medium"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-lg glass text-gray-300 hover:text-white hover:border-accent-cyan/50 transition-all text-sm font-medium"
               >
                 <Github className="w-4 h-4" />
                 GitHub
@@ -153,18 +175,30 @@ export default function Navigation() {
                   {link.label}
                 </motion.button>
               ))}
-              <motion.a
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                href="https://github.com/TheNikhilLuhach"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-3 mt-2 rounded-lg bg-accent-cyan/10 text-accent-cyan text-sm font-medium"
-              >
-                <Github className="w-4 h-4" />
-                View GitHub
-              </motion.a>
+              
+              <div className="pt-2 border-t border-dark-600 mt-2 space-y-2">
+                <motion.a
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  href="/resume/Nikhil_Kumar_Resume.pdf"
+                  download="Nikhil_Kumar_Resume.pdf"
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg bg-accent-cyan/15 text-accent-cyan text-sm font-medium"
+                >
+                  <FileDown className="w-4 h-4" />
+                  Download Resume (PDF)
+                </motion.a>
+                <motion.a
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  href="https://github.com/TheNikhilLuhach"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg glass text-gray-300 text-sm font-medium"
+                >
+                  <Github className="w-4 h-4" />
+                  View GitHub
+                </motion.a>
+              </div>
             </div>
           </motion.div>
         )}

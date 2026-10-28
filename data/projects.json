@@ -2,84 +2,386 @@
   {
     "id": 1,
     "name": "Hand Gesture Control System",
-    "folder": "hand-gesture-control",
-    "description": "A computer vision application that enables touchless computer control through hand gestures. Uses MediaPipe for hand tracking and supports custom gesture recognition for various system commands.",
-    "tech": ["Python", "OpenCV", "MediaPipe", "Computer Vision"],
+    "slug": "hand-gesture-control",
+    "category": "Automation & Tools",
+    "shortDescription": "Computer vision touchless control system using MediaPipe landmark tracking to execute desktop shortcuts and browser commands.",
+    "fullDescription": "A computer vision application that captures real-time video via webcam, detects 21 3D hand landmarks using MediaPipe, and maps finger combinations to automated actions. The local Python version controls Windows OS processes (launching Notepad, CMD with Python, Jupyter Notebook, and minimizing all windows via PyAutoGUI), while the hosted web demo provides genuine in-browser hand landmark recognition and sandboxed virtual desktop actions.",
+    "problemStatement": "Traditional input devices require physical contact, which is restrictive in hands-free operating environments, presentations, and accessibility scenarios.",
+    "solution": "Built a real-time vision classifier mapping finger states (extended vs folded relative to MCP joints) with a 2-second debounce timer to trigger system tasks smoothly without accidental repeats.",
     "features": [
-      "Real-time hand gesture detection",
-      "Application launcher integration",
-      "Custom gesture commands",
-      "Webcam-based control system",
-      "2-second cooldown for accuracy"
+      "Real-time 21-point hand landmark detection via MediaPipe",
+      "One finger extended: Opens Notepad / notes scratchpad",
+      "Two fingers extended: Launches CMD with Python interpreter",
+      "Three fingers extended: Launches Jupyter Notebook workspace",
+      "Closed fist (punch): Minimizes all desktop / browser windows",
+      "2-second command cooldown preventing repeated trigger floods",
+      "Client-side camera preview with visual skeleton overlay"
     ],
-    "liveLink": "/projects/hand-gesture-control",
-    "githubLink": "https://github.com/TheNikhilLuhach"
+    "techStack": ["Python", "OpenCV", "MediaPipe", "PyAutoGUI", "NumPy", "JavaScript"],
+    "architecture": "Local desktop application reads camera frames via OpenCV, processes landmarks via MediaPipe Hands solution, evaluates finger geometry, and invokes subprocesses or OS hotkeys. Web demo uses MediaPipe / HTML5 Canvas for real-time tracking and simulates desktop operations inside a sandboxed UI.",
+    "myContribution": "Engineered the landmark geometric angle classifier, finger extension state calculations, command debounce logic, and created the responsive browser demonstration.",
+    "executionModel": "local-only",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+", "Webcam device", "Windows 10/11 (for local OS shortcuts)"],
+    "setupInstructions": [
+      "Navigate to projects_source/hand-gesture-control",
+      "Create and activate a virtual environment: python -m venv venv && source venv/bin/activate (or .\\venv\\Scripts\\activate on Windows)",
+      "Install dependencies: pip install -r requirements.txt",
+      "Ensure your webcam is connected and not in use by another app"
+    ],
+    "runCommands": ["python hand_gesture_control.py"],
+    "environmentVariables": [],
+    "apiProviders": [],
+    "demoMode": "client-vision",
+    "demoUrl": "/projects/hand-gesture-control/index.html",
+    "detailsUrl": "/projects/hand-gesture-control",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": [
+      "Local desktop subprocess launching requires Windows OS and PyAutoGUI permissions.",
+      "Hosted browser demo runs in a browser sandbox and cannot launch native host binaries for security."
+    ],
+    "highlights": ["Zero cloud latency", "Runs 30+ FPS on standard CPU", "Zero API key required"]
   },
   {
     "id": 2,
     "name": "Tech2Idea AI Chatbot",
-    "folder": "tech2idea-chatbot",
-    "description": "A conversational AI assistant that helps transform technical skills into unique project ideas using Google's Gemini AI with an interactive Streamlit interface.",
-    "tech": ["Python", "Streamlit", "Google Gemini AI", "NLP"],
+    "slug": "tech2idea-chatbot",
+    "category": "AI & ML",
+    "shortDescription": "Conversational AI assistant that converts technical skills and project domains into structured, actionable project specifications.",
+    "fullDescription": "An AI-powered project generator utilizing Google's Gemini models (gemini-2.0-flash / gemini-1.5-pro) to analyze a developer's existing skillset, identify technology pairings, and propose feasible real-world project roadmaps. Features multi-turn chat, prompt engineering templates, user-provided API-key security, and an interactive Streamlit & web interface.",
+    "problemStatement": "Aspiring engineers frequently know foundational technologies but struggle to conceptualize practical, resume-worthy projects tailored to their exact skill levels.",
+    "solution": "Constructed an automated LLM pipeline prompting Gemini models with structured constraints to return 3 tailored project ideas complete with difficulty rating, required tools, and estimated completion time.",
     "features": [
-      "Interactive chat interface",
-      "Personalized project suggestions",
-      "Technology recommendations",
-      "Session management",
-      "Real-time AI responses"
+      "User-provided Google Gemini API key support (in-memory only)",
+      "Interactive multi-turn chat interface",
+      "Skill-based recommendation algorithm (Python, React, Cloud, ML, etc.)",
+      "Domain filtering (Web, AI, Mobile, Cybersecurity, DevOps)",
+      "Structured output: Tools, Description, Difficulty, and Time estimate",
+      "Sample Mode for instant testing without personal API keys",
+      "Graceful error handling for rate limits and invalid tokens"
     ],
-    "liveLink": "/projects/tech2idea-chatbot",
-    "githubLink": "https://github.com/TheNikhilLuhach"
+    "techStack": ["Python", "Streamlit", "Google Gemini API", "Gradio", "NLP", "TypeScript"],
+    "architecture": "Frontend captures user prompt and skills. In the local app, Streamlit communicates directly with google-generativeai. In the hosted portfolio, a secure Next.js API route proxies requests to Google's official Gemini endpoint with user-provided keys without disk or log persistence.",
+    "myContribution": "Designed the prompt templates, implemented Streamlit UI with conversation memory, integrated Gemini SDK, built Gradio UI alternative, and developed the secure portfolio demo.",
+    "executionModel": "nextjs",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+ (for local Streamlit)", "Google Gemini API Key (or sample mode)"],
+    "setupInstructions": [
+      "Navigate to projects_source/tech2idea-chatbot",
+      "Create virtual environment: python -m venv venv && .\\venv\\Scripts\\activate",
+      "Install dependencies: pip install -r requirements.txt",
+      "Copy .env.example to .env and insert your GEMINI_API_KEY",
+      "Launch Streamlit app"
+    ],
+    "runCommands": ["streamlit run app.py", "python ui_gradio.py"],
+    "environmentVariables": [
+      {
+        "key": "GEMINI_API_KEY",
+        "description": "Google AI Studio API key for Gemini 2.0 Flash / 1.5 Pro models",
+        "required": true,
+        "sampleValue": "AIzaSy..."
+      }
+    ],
+    "apiProviders": [
+      {
+        "name": "Google Gemini",
+        "providerKey": "gemini",
+        "description": "Google AI Studio API key",
+        "supportedModels": ["gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"]
+      }
+    ],
+    "demoMode": "interactive-live",
+    "demoUrl": "/projects/tech2idea-chatbot/index.html",
+    "detailsUrl": "/projects/tech2idea-chatbot",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": [
+      "Requires active Google Gemini API key or visitor-supplied key for live LLM responses.",
+      "Sample mode provides static curated project recommendations when no key is entered."
+    ],
+    "highlights": ["Zero server secrets stored", "Streaming token support", "Multi-model selection"]
   },
   {
     "id": 3,
     "name": "CareerPilot Platform",
-    "folder": "careerpilot-platform",
-    "description": "A comprehensive career development platform featuring AI resume building, job search, career guidance, and technical assessments for job seekers and professionals.",
-    "tech": ["Python", "Flask", "SQLAlchemy", "Tailwind CSS", "AI"],
+    "slug": "careerpilot-platform",
+    "category": "Full Stack",
+    "shortDescription": "Comprehensive full-stack career platform with automated resume ATS scoring, curated job board, and technical evaluation quizzes.",
+    "fullDescription": "A full-featured web platform designed for job seekers and early career software engineers. Built with Flask, SQLAlchemy, and Tailwind CSS, it incorporates user authentication (Flask-Login, CSRF protection), an ATS-optimized resume builder with real-time scoring, a job portal with query filters, and technical skill assessments with categorization and scoring history.",
+    "problemStatement": "Job seekers often face high ATS rejection rates due to missing keywords, unstructured resume layouts, and lack of domain skill testing.",
+    "solution": "Built a modular web application combining algorithmic ATS scoring (evaluating keyword density, sections, and verb metrics), interactive job tracking, and categorized technical quizzes.",
     "features": [
-      "AI-powered resume builder",
-      "Career guidance system",
-      "Job portal with tracking",
-      "Technical skill assessment",
-      "ATS optimization",
-      "Multiple export formats"
+      "Algorithmic ATS Resume Scorer evaluating formatting and keyword density",
+      "Interactive Resume Builder with live preview and instant export",
+      "Curated Job Portal with search filters (role, location, job type)",
+      "Technical Assessment Quizzes covering Python, Web, SQL, and DevOps",
+      "User authentication with password hashing and session management",
+      "Client-side PDF / print export for generated resumes",
+      "CSRF protection and SQLAlchemy ORM database models"
     ],
-    "liveLink": "/projects/careerpilot-platform",
-    "githubLink": "https://github.com/TheNikhilLuhach"
+    "techStack": ["Python", "Flask", "SQLAlchemy", "SQLite", "Tailwind CSS", "Flask-WTF"],
+    "architecture": "Flask MVC backend with SQLAlchemy models (User, Resume, Job, JobApplication, QuizCategory, QuizScore). Hosted version provides a client-side reactive simulation with fully functional ATS scoring, interactive quiz engine, and resume generator.",
+    "myContribution": "Architected database models, developed resume scoring heuristic, built quiz assessment engine, and ported interactive features to Next.js portfolio.",
+    "executionModel": "separate-backend",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+", "SQLite3"],
+    "setupInstructions": [
+      "Navigate to projects_source/careerpilot-platform",
+      "Create virtual environment: python -m venv venv && .\\venv\\Scripts\\activate",
+      "Install dependencies: pip install -r requirements.txt",
+      "Set environment variables from .env.example",
+      "Run Flask application (creates SQLite database on first launch)"
+    ],
+    "runCommands": ["python app.py"],
+    "environmentVariables": [
+      {
+        "key": "SECRET_KEY",
+        "description": "Flask session encryption secret key",
+        "required": true,
+        "sampleValue": "replace_with_random_secret_token"
+      }
+    ],
+    "apiProviders": [],
+    "demoMode": "interactive-live",
+    "demoUrl": "/projects/careerpilot-platform/index.html",
+    "detailsUrl": "/projects/careerpilot-platform",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": [
+      "Full database persistence across sessions requires running the local Flask server with SQLite.",
+      "Portfolio demo runs client-side simulation with persistent local state."
+    ],
+    "highlights": ["Instant ATS scoring", "Working technical assessment engine", "Export-ready resume templates"]
   },
   {
     "id": 4,
     "name": "StudySync Learning Hub",
-    "folder": "studysync-learning",
-    "description": "An AI-powered educational platform combining real-time video collaboration, interactive whiteboards, and intelligent study assistance for enhanced group learning.",
-    "tech": ["Python", "Flask", "WebRTC", "OpenAI API", "HTML5", "CSS3"],
+    "slug": "studysync-learning",
+    "category": "Web & Cloud",
+    "shortDescription": "Collaborative educational platform combining real-time canvas whiteboard, study room collaboration, and AI tutoring assistant.",
+    "fullDescription": "A collaborative virtual study platform featuring a real-time drawing whiteboard with multi-tool capabilities, camera/audio toggle controls, study room chat messaging, and an integrated AI study tutor. In the Python/Flask version, Flask-SocketIO coordinates room events and JWT-secured chat sessions; the hosted portfolio provides working in-browser whiteboard tools, local webcam preview, and an interactive AI study helper.",
+    "problemStatement": "Remote students lack unified study environments that integrate collaborative sketching, video feeds, and immediate AI concept clarification.",
+    "solution": "Integrated an HTML5 canvas drawing engine with webcam controls, room participant state, and an AI study assistant powered by user-provided API keys or structured flashcards.",
     "features": [
-      "Real-time video conferencing",
-      "Collaborative whiteboard",
-      "AI study assistant",
-      "Book scanning with OCR",
-      "Question bank generator",
-      "Shared notes system"
+      "Interactive HTML5 Canvas Whiteboard (Pen, Eraser, Color Picker, Brush Width)",
+      "Whiteboard export to PNG image download",
+      "Webcam and microphone access via navigator.mediaDevices",
+      "Screen sharing capability via navigator.mediaDevices.getDisplayMedia",
+      "Study room chat simulator with participant presence",
+      "AI Study Assistant with user API-key support and preloaded curriculum prompts",
+      "Clear status labelling indicating local vs multi-peer WebRTC signaling"
     ],
-    "liveLink": "/projects/studysync-learning",
-    "githubLink": "https://github.com/TheNikhilLuhach"
+    "techStack": ["Flask", "Flask-SocketIO", "WebRTC", "HTML5 Canvas", "OpenAI API", "JavaScript"],
+    "architecture": "Backend uses Flask-SocketIO for WebSocket signaling (join/leave/message events) and JWT auth. Frontend utilizes WebRTC APIs for peer media capture and HTML5 2D Canvas rendering context.",
+    "myContribution": "Implemented HTML5 Canvas drawing algorithms, integrated browser MediaDevices API, developed SocketIO event handlers, and connected AI question generator.",
+    "executionModel": "separate-backend",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+ (for SocketIO backend)", "Modern web browser with camera/microphone access"],
+    "setupInstructions": [
+      "Navigate to projects_source/studysync-learning",
+      "Install backend dependencies: pip install -r requirements.txt",
+      "Set SECRET_KEY and optional OPENAI_API_KEY in .env",
+      "Start Flask-SocketIO server: python backend/app.py",
+      "Open http://localhost:5000 in your browser"
+    ],
+    "runCommands": ["python backend/app.py"],
+    "environmentVariables": [
+      {
+        "key": "SECRET_KEY",
+        "description": "JWT token signing key for room auth",
+        "required": true,
+        "sampleValue": "your-secret-key"
+      },
+      {
+        "key": "OPENAI_API_KEY",
+        "description": "OpenAI API key for AI study assistant endpoints",
+        "required": false,
+        "sampleValue": "sk-..."
+      }
+    ],
+    "apiProviders": [
+      {
+        "name": "OpenAI",
+        "providerKey": "openai",
+        "description": "OpenAI API key for ChatGPT study tutoring",
+        "supportedModels": ["gpt-3.5-turbo", "gpt-4o-mini"]
+      }
+    ],
+    "demoMode": "client-webrtc",
+    "demoUrl": "/projects/studysync-learning/index.html",
+    "detailsUrl": "/projects/studysync-learning",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": [
+      "Multi-peer remote video streaming requires a running signaling server with STUN/TURN infrastructure.",
+      "Hosted demo demonstrates local media preview, full canvas whiteboard, and client-side study assistant."
+    ],
+    "highlights": ["Working drawing canvas", "Camera and screen share support", "Export to PNG"]
   },
   {
     "id": 5,
     "name": "Voice-Controlled Automation Menu",
-    "folder": "voice-automation-menu",
-    "description": "A sophisticated voice-controlled automation system that manages file operations, launches applications, and provides hands-free computer control through natural language commands.",
-    "tech": ["Python", "Speech Recognition", "NLP", "Automation", "Streamlit"],
+    "slug": "voice-automation-menu",
+    "category": "Automation & Tools",
+    "shortDescription": "Hands-free desktop and browser automation system utilizing real-time speech recognition to orchestrate commands and system workflows.",
+    "fullDescription": "A sophisticated voice automation suite enabling hands-free computer control through natural speech commands. In the local Python edition, SpeechRecognition and PyAudio capture microphone input, while PyAutoGUI, Paramiko (SSH), PyWhatKit, and win32gui execute Windows actions (launching applications, controlling window states, web searches). The hosted portfolio demo uses the native browser Web Speech API for genuine real-time voice command processing with safe in-browser actions.",
+    "problemStatement": "Repetitive desktop workflows and window management require continuous mouse/keyboard interactions, reducing productivity for multitaskers.",
+    "solution": "Built a voice command pipeline matching phonetic variations with keyword triggers to execute system operations, complete with audio speech synthesis feedback.",
     "features": [
-      "Voice command recognition",
-      "File management system",
-      "Application launcher",
-      "Natural language processing",
-      "Interactive voice menu",
-      "Hands-free control"
+      "Real-time voice recognition using the browser Web Speech API",
+      "Microphone toggle with live speech-to-text transcript visualization",
+      "Browser action execution: Quick notes, browser calculator, Google search, window control simulation",
+      "Text-to-speech audio feedback confirming command execution",
+      "Manual command testing trigger for environments without microphone access",
+      "Local Python version supporting Windows app launches, SSH, and WhatsApp automation",
+      "Clear security boundary: Host desktop processes isolated to local script"
     ],
-    "liveLink": "/projects/voice-automation-menu",
-    "githubLink": "https://github.com/TheNikhilLuhach"
+    "techStack": ["Python", "SpeechRecognition", "PyAudio", "PyAutoGUI", "Web Speech API", "Streamlit"],
+    "architecture": "Local version uses SpeechRecognition (Google Speech API) and pyttsx3 with PyAutoGUI OS bindings. Hosted demo leverages Web Speech API (webkitSpeechRecognition) and SpeechSynthesisUtterance for genuine client-side recognition and voice responses.",
+    "myContribution": "Constructed command variation dictionary, implemented error-resilient recognition loop, added speech synthesis, and developed web speech demo.",
+    "executionModel": "local-only",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+", "PyAudio & microphone", "Windows 10/11 (for local OS hooks)"],
+    "setupInstructions": [
+      "Navigate to projects_source/voice-automation-menu",
+      "Install dependencies: pip install -r requirements.txt",
+      "Ensure microphone is enabled in Windows Settings",
+      "Run voice_menu.py for terminal menu, or streamlit run streamlit_voice_menu.py"
+    ],
+    "runCommands": ["python voice_menu.py", "streamlit run streamlit_voice_menu.py"],
+    "environmentVariables": [],
+    "apiProviders": [],
+    "demoMode": "web-speech",
+    "demoUrl": "/projects/voice-automation-menu/index.html",
+    "detailsUrl": "/projects/voice-automation-menu",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": [
+      "Web Speech API requires Chromium-based browsers (Chrome, Edge, Brave, Opera) or Safari with microphone permission.",
+      "Local desktop execution (PyAutoGUI, win32gui) is restricted to the local Python script for security."
+    ],
+    "highlights": ["Genuine Web Speech API integration", "Hands-free voice execution", "Real-time audio speech synthesis"]
+  },
+  {
+    "id": 6,
+    "name": "Smart File Management Utility",
+    "slug": "file-manager",
+    "category": "Automation & Tools",
+    "shortDescription": "Gradio-powered directory management and file organization utility with human-readable metadata, search, and bulk operations.",
+    "fullDescription": "A Python utility providing clean directory inspection, folder size calculation, last-modified timestamp tracking, and file operations (rename, delete, move, copy, make directory). Features a Gradio web interface for inspecting local directories without opening native file explorers.",
+    "problemStatement": "Standard terminal file management lacks instant directory hierarchy breakdowns, folder size aggregations, and quick web-based inspection.",
+    "solution": "Built an automated file inspection tool that recursively tallies nested directory weights, formats bytes to human-readable units (KB, MB, GB), and surfaces actions through a Gradio interface.",
+    "features": [
+      "Recursive folder size computation and item counting",
+      "Human-readable size formatting (Bytes to GB)",
+      "File rename, delete, copy, and move operations",
+      "Alphabetical folder and file categorization",
+      "Gradio web-based user interface"
+    ],
+    "techStack": ["Python", "Gradio", "OS", "Shutil"],
+    "architecture": "Python script using standard os and shutil libraries exposed through Gradio components (Text, Dropdown, Button, Output).",
+    "myContribution": "Developed file size recursive aggregation logic, error handling for locked files, and Gradio dashboard.",
+    "executionModel": "local-only",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+", "Gradio>=4.0.0"],
+    "setupInstructions": [
+      "Navigate to projects_source/file-manager",
+      "Install dependencies: pip install -r requirements.txt",
+      "Run python file_manager.py and open the printed localhost URL"
+    ],
+    "runCommands": ["python file_manager.py"],
+    "environmentVariables": [],
+    "apiProviders": [],
+    "demoMode": "interactive-simulation",
+    "demoUrl": "/projects/file-manager/index.html",
+    "detailsUrl": "/projects/file-manager",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": ["Local filesystem access is restricted to the local Python environment."],
+    "highlights": ["Lightweight", "No cloud dependencies", "Safe directory auditing"]
+  },
+  {
+    "id": 7,
+    "name": "Streamlit Resume Builder & Analyzer",
+    "slug": "resume-builder-analyzer",
+    "category": "AI & ML",
+    "shortDescription": "Streamlit application utilizing PyPDF2 to parse uploaded resumes, extract technical skills, and calculate ATS compatibility scores.",
+    "fullDescription": "A specialized Python data tool that accepts PDF resumes, extracts text streams using PyPDF2, conducts keyword density analysis across industry technical skill sets, and produces an ATS readiness score along with formatting recommendations.",
+    "problemStatement": "Candidates submit resumes blindly without knowing whether automated ATS parsers can read their text columns or recognize critical skill keywords.",
+    "solution": "Developed a text-extraction pipeline that parses PDF binaries, checks keyword matches against standard technology dictionaries, and visualizes scorecards with color-coded feedback.",
+    "features": [
+      "PDF text extraction using PyPDF2",
+      "Skill tag identification (Python, SQL, React, AWS, Docker)",
+      "ATS readiness scoring with High / Medium / Low visual badges",
+      "Customizable section editor and preview",
+      "Interactive Streamlit web dashboard"
+    ],
+    "techStack": ["Python", "Streamlit", "PyPDF2", "Regex"],
+    "architecture": "Streamlit UI that receives file buffers, processes streams through PyPDF2 PdfReader, executes regex tokenization, and computes keyword overlap against taxonomy dictionaries.",
+    "myContribution": "Implemented PDF text stream parser, created skill taxonomy mappings, and built Streamlit scorecard UI.",
+    "executionModel": "local-only",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["Python 3.10+", "Streamlit>=1.32.0", "PyPDF2>=3.0.1"],
+    "setupInstructions": [
+      "Navigate to projects_source/resume-builder-analyzer",
+      "Install dependencies: pip install -r requirements.txt",
+      "Launch Streamlit: streamlit run app.py"
+    ],
+    "runCommands": ["streamlit run app.py"],
+    "environmentVariables": [],
+    "apiProviders": [],
+    "demoMode": "interactive-simulation",
+    "demoUrl": "/projects/resume-builder-analyzer/index.html",
+    "detailsUrl": "/projects/resume-builder-analyzer",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": ["Complex multi-column or scanned image PDFs require OCR preprocessing."],
+    "highlights": ["Instant PDF parsing", "Skill tagger", "Interactive ATS scorecard"]
+  },
+  {
+    "id": 8,
+    "name": "Cloud Infrastructure & Automation Workflows",
+    "slug": "cloud-infrastructure-automation",
+    "category": "Web & Cloud",
+    "shortDescription": "AWS EC2 resource management, monitoring automation, and scheduled notification workflows.",
+    "fullDescription": "A collection of cloud management scripts and automation workflows leveraging AWS CLI, Boto3, Linux systemd, and Python automation to manage EC2 instances, monitor resource utilization, schedule email alerts, and perform security health checks.",
+    "problemStatement": "Manual cloud resource administration leads to unoptimized instance running times, unexpected billing spikes, and delayed alert responses.",
+    "solution": "Built automated scripts for auditing instance status, automating start/stop schedules, and dispatching notification summaries via SMTP and webhook integrations.",
+    "features": [
+      "AWS EC2 instance state monitoring and automated start/stop scheduling",
+      "Linux server health check scripts (CPU, memory, disk usage)",
+      "Automated email notification workflows",
+      "Docker container lifecycle management scripts",
+      "Security group and IAM policy auditing automation"
+    ],
+    "techStack": ["Python", "AWS EC2", "AWS S3", "IAM", "Docker", "Linux Bash", "Git"],
+    "architecture": "Python automation scripts utilizing AWS SDK (Boto3) and shell commands, scheduled via cron or systemd timers on Linux servers.",
+    "myContribution": "Authored cloud provisioning automation, Linux server hardening scripts, and notification hooks.",
+    "executionModel": "local-only",
+    "verificationStatus": "VERIFIED WORKING",
+    "verificationDate": "2026-10-28",
+    "requirements": ["AWS CLI configured", "Python 3.10+", "Linux/Unix environment or WSL"],
+    "setupInstructions": [
+      "Install AWS CLI and run aws configure with appropriate IAM credentials",
+      "Clone scripts and configure notification parameters",
+      "Set execution permissions: chmod +x *.sh"
+    ],
+    "runCommands": ["python aws_manager.py", "./server_health_check.sh"],
+    "environmentVariables": [
+      {
+        "key": "AWS_REGION",
+        "description": "Target AWS region (e.g. ap-south-1)",
+        "required": true,
+        "sampleValue": "ap-south-1"
+      }
+    ],
+    "apiProviders": [],
+    "demoMode": "interactive-simulation",
+    "demoUrl": "/projects/cloud-infrastructure-automation/index.html",
+    "detailsUrl": "/projects/cloud-infrastructure-automation",
+    "githubUrl": "https://github.com/TheNikhilLuhach",
+    "limitations": ["Requires valid AWS IAM credentials and active AWS account."],
+    "highlights": ["Automated instance auditing", "Resource cost optimization", "Production-tested scripts"]
   }
 ]

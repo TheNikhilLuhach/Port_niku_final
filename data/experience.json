@@ -1,29 +1,47 @@
 [
   {
     "id": 1,
-    "role": "Generative AI Trainee",
-    "company": "LinuxWorld Informatics Pvt Ltd",
+    "role": "DevOps Trainee",
+    "company": "LinuxWorld Informatics Pvt. Ltd.",
     "location": "Remote",
-    "duration": "May 2025 – Aug 2025",
-    "description": "Worked on Generative AI concepts and automation-based solutions using Python. Focused on building real-world use cases and understanding AI-driven workflows.",
-    "skills": ["Generative AI", "Python", "Automation", "AI Workflows", "Prompt Engineering"]
+    "duration": "Jun 2026 – Jul 2026",
+    "description": "Configured CI/CD automation pipelines, containerized environments using Docker, and administered production Linux servers. Automated server provisioning and routine infrastructure deployment tasks.",
+    "skills": ["DevOps", "Docker", "CI/CD", "Linux Server Administration", "Git", "Cloud Infrastructure"]
   },
   {
     "id": 2,
-    "role": "Frontend Developer Intern",
-    "company": "1Stop.ai",
+    "role": "Python Developer Intern",
+    "company": "The Skybrisk",
     "location": "Remote",
-    "duration": "Mar 2024 – Apr 2024",
-    "description": "Worked on frontend development, building responsive and user-friendly web interfaces using core web technologies.",
-    "skills": ["HTML", "CSS", "JavaScript", "UI Design", "Responsive Design"]
+    "duration": "Dec 2025 – Jun 2026",
+    "description": "Engineered Python backend microservices, REST APIs, and automated task-scheduling workflows. Developed scalable data processing scripts and implemented unit testing routines.",
+    "skills": ["Python", "REST APIs", "Backend Development", "Automation", "Data Processing", "Unit Testing"]
   },
   {
     "id": 3,
-    "role": "Linux & AWS Intern",
-    "company": "Tech Organization",
+    "role": "Generative AI Trainee",
+    "company": "LinuxWorld Informatics Pvt. Ltd.",
     "location": "Remote",
-    "duration": "2024",
-    "description": "Gained hands-on experience with AWS services including EC2, S3, IAM, and CLI operations. Managed Linux servers, implemented security best practices, and automated deployment workflows.",
-    "skills": ["AWS", "Linux", "EC2", "S3", "IAM", "Server Management", "Bash Scripting"]
+    "duration": "May 2025 – Aug 2025",
+    "description": "Constructed Generative AI solutions and conversational workflows leveraging Google Gemini models and prompt engineering. Built automated project recommendation engines and interactive prototype applications.",
+    "skills": ["Generative AI", "Google Gemini API", "Python", "Streamlit", "Prompt Engineering", "NLP"]
+  },
+  {
+    "id": 4,
+    "role": "AWS Cloud Computing Trainee",
+    "company": "LinuxWorld Informatics Pvt. Ltd.",
+    "location": "Remote",
+    "duration": "Jun 2024 – Aug 2024",
+    "description": "Provisioned and managed AWS cloud infrastructure including Amazon EC2 instances, S3 storage buckets, and IAM security policies. Automated cloud operations and auditing using the AWS CLI and Linux Bash scripts.",
+    "skills": ["AWS", "Amazon EC2", "Amazon S3", "IAM", "AWS CLI", "Linux Server Management", "Bash"]
+  },
+  {
+    "id": 5,
+    "role": "Web Development Intern",
+    "company": "1Stop.ai",
+    "location": "Remote",
+    "duration": "Mar 2024 – Apr 2024",
+    "description": "Developed responsive, accessible web interfaces adhering to modern HTML5, CSS3, and JavaScript standards. Collaborated on cross-browser UI rendering, layout fluidity, and interactive user experiences.",
+    "skills": ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UI/UX", "Cross-Browser Compatibility"]
   }
 ]

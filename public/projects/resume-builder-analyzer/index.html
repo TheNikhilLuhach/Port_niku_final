@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamlit Resume Builder & Analyzer — Web Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #090e17 0%, #151326 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 6px 14px;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            border-radius: 20px;
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header p { color: #94a3b8; font-size: 0.95rem; }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .dropzone {
+            border: 2px dashed rgba(167, 139, 250, 0.4);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: rgba(167, 139, 250, 0.03);
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .dropzone:hover { background: rgba(167, 139, 250, 0.08); }
+        .tag {
+            display: inline-block;
+            background: rgba(167, 139, 250, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin: 3px;
+        }
+        .btn {
+            background: linear-gradient(45deg, #a78bfa, #ec4899);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/projects/resume-builder-analyzer" class="back-nav">← Back to Project Details</a>
+        <div class="header">
+            <h1>Streamlit Resume Builder & Analyzer</h1>
+            <p>PDF parsing and ATS keyword extraction tool utilizing PyPDF2 and regex tokenization.</p>
+        </div>
+
+        <div class="card">
+            <div class="dropzone" onclick="simulateUpload()">
+                <div style="font-size: 2rem; margin-bottom: 8px;">📄</div>
+                <div style="font-weight: 600; color: #c4b5fd; margin-bottom: 4px;">Click to Load Sample PDF Resume ("Nikhil_Kumar_Resume.pdf")</div>
+                <div style="font-size: 0.8rem; color: #94a3b8;">Simulates PyPDF2 binary stream extraction and keyword categorization</div>
+            </div>
+
+            <div id="resultsArea" style="display: none;">
+                <h3 style="font-size: 1.1rem; color: #34d399; margin-bottom: 12px;">✅ Extracted Technical Keywords & ATS Metrics</h3>
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 6px;">Identified Skill Badges:</div>
+                    <div id="skillBadges"></div>
+                </div>
+                <div style="background: #070a13; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 15px; font-size: 0.85rem; line-height: 1.6;">
+                    <div><strong>ATS Compatibility Rating:</strong> <span style="color: #34d399; font-weight: bold;">High (92%)</span></div>
+                    <div><strong>Page Count:</strong> 1 page (Optimal)</div>
+                    <div><strong>Section Headings:</strong> Education, Technical Skills, Work Experience, Featured Projects, Achievements</div>
+                    <div><strong>Verdict:</strong> Ready for recruiter screening and automated parsing systems.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateUpload() {
+            document.getElementById('resultsArea').style.display = 'block';
+            const skills = ['Python', 'Java', 'C++', 'JavaScript', 'TypeScript', 'Next.js', 'React', 'Flask', 'REST APIs', 'AWS EC2', 'AWS S3', 'Docker', 'Linux', 'OpenCV', 'MediaPipe', 'Git', 'SQLAlchemy', 'MySQL'];
+            document.getElementById('skillBadges').innerHTML = skills.map(s => `<span class="tag">${s}</span>`).join('');
+        }
+    </script>
+</body>
+</html>

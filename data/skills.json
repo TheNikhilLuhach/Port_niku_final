@@ -4,63 +4,65 @@
       "title": "Programming Languages",
       "icon": "Code2",
       "skills": [
-        { "name": "Python", "level": 90 },
-        { "name": "JavaScript", "level": 85 },
-        { "name": "Java", "level": 75 },
-        { "name": "C / C++", "level": 70 },
-        { "name": "Bash/Shell", "level": 65 }
+        { "name": "Python", "level": 92 },
+        { "name": "JavaScript / TypeScript", "level": 86 },
+        { "name": "Java", "level": 78 },
+        { "name": "C / C++", "level": 74 },
+        { "name": "Bash / Shell Scripting", "level": 82 }
       ]
     },
     {
-      "title": "Web Development",
+      "title": "Web & Backend Frameworks",
       "icon": "Globe",
       "skills": [
-        { "name": "React / Next.js", "level": 85 },
-        { "name": "HTML5 / CSS3", "level": 90 },
+        { "name": "Next.js 14", "level": 88 },
+        { "name": "React", "level": 88 },
+        { "name": "Flask / FastAPI", "level": 86 },
         { "name": "Node.js", "level": 80 },
-        { "name": "Flask / FastAPI", "level": 85 },
-        { "name": "REST APIs", "level": 88 }
-      ]
-    },
-    {
-      "title": "Tools & Platforms",
-      "icon": "Wrench",
-      "skills": [
-        { "name": "Git & GitHub", "level": 90 },
-        { "name": "Docker", "level": 75 },
-        { "name": "VS Code", "level": 95 },
-        { "name": "Postman", "level": 85 },
-        { "name": "VirtualBox", "level": 80 }
+        { "name": "RESTful APIs", "level": 90 },
+        { "name": "HTML5 / CSS3 / Tailwind", "level": 92 }
       ]
     },
     {
       "title": "Cloud & DevOps",
       "icon": "Cloud",
       "skills": [
-        { "name": "AWS (EC2, S3, IAM)", "level": 80 },
-        { "name": "Linux Server Mgmt", "level": 85 },
-        { "name": "CI/CD (GitHub Actions)", "level": 70 },
-        { "name": "AWS CLI", "level": 75 }
+        { "name": "AWS (EC2, S3, IAM)", "level": 84 },
+        { "name": "Docker Containerization", "level": 80 },
+        { "name": "Linux Server Administration", "level": 88 },
+        { "name": "CI/CD & GitHub Actions", "level": 78 },
+        { "name": "AWS CLI", "level": 82 }
       ]
     },
     {
-      "title": "Cybersecurity",
-      "icon": "Shield",
+      "title": "AI & Computer Vision",
+      "icon": "Cpu",
       "skills": [
-        { "name": "Kali Linux", "level": 85 },
-        { "name": "Burp Suite", "level": 80 },
-        { "name": "Nmap / Wireshark", "level": 75 },
-        { "name": "Metasploit", "level": 70 },
-        { "name": "Vulnerability Analysis", "level": 78 }
+        { "name": "Google Gemini API", "level": 88 },
+        { "name": "Prompt Engineering", "level": 90 },
+        { "name": "OpenCV", "level": 82 },
+        { "name": "MediaPipe Hand Tracking", "level": 84 },
+        { "name": "Streamlit & Gradio", "level": 86 }
       ]
     },
     {
-      "title": "Databases",
+      "title": "Databases & Storage",
       "icon": "Database",
       "skills": [
-        { "name": "MongoDB", "level": 85 },
-        { "name": "MySQL", "level": 80 },
-        { "name": "Database Design", "level": 75 }
+        { "name": "MySQL", "level": 82 },
+        { "name": "SQLite & SQLAlchemy", "level": 86 },
+        { "name": "MongoDB", "level": 80 },
+        { "name": "Database Schema Design", "level": 82 }
+      ]
+    },
+    {
+      "title": "Security & Developer Tools",
+      "icon": "Shield",
+      "skills": [
+        { "name": "Git & GitHub", "level": 92 },
+        { "name": "Kali Linux & Ethical Hacking", "level": 82 },
+        { "name": "Postman API Testing", "level": 88 },
+        { "name": "VS Code & Debugging", "level": 94 }
       ]
     }
   ]

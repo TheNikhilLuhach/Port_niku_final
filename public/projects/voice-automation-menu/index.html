@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice-Controlled Automation Menu</title>
+    <title>Voice-Controlled Automation Menu — Live Interactive Demo</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,8 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0c15 0%, #1f1412 100%);
             color: #ffffff;
             min-height: 100vh;
             padding: 20px;
@@ -23,470 +23,610 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #f59e0b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 6px 14px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .back-nav:hover {
+            background: rgba(245, 158, 11, 0.2);
+        }
         
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.3rem;
+            margin-bottom: 8px;
             background: linear-gradient(45deg, #f59e0b, #ef4444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
         .header p {
-            color: #a0a0a0;
-            font-size: 1.1rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .tech-stack {
+        .badges-bar {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 15px 0;
             flex-wrap: wrap;
         }
         
         .tech-badge {
             background: rgba(245, 158, 11, 0.1);
             border: 1px solid rgba(245, 158, 11, 0.3);
-            padding: 5px 15px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            color: #fbbf24;
         }
-        
-        .voice-interface {
+
+        .notice-banner {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #fde68a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .main-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin: 40px 0;
         }
-        
-        .voice-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
         }
-        
-        .voice-panel h3 {
-            color: #f59e0b;
-            margin-bottom: 20px;
+
+        .panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .panel-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
         }
-        
-        .voice-visualizer {
-            background: rgba(0, 0, 0, 0.3);
+
+        /* Voice Visualizer */
+        .visualizer-box {
+            background: #090812;
             border: 2px solid rgba(245, 158, 11, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            min-height: 200px;
+            border-radius: 12px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mic-orb {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.15);
+            border: 2px solid #f59e0b;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.3s;
         }
-        
-        .voice-wave {
-            width: 60px;
-            height: 60px;
-            border: 3px solid #f59e0b;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 0 10px;
-            animation: pulse 1.5s infinite;
+        .mic-orb.listening {
+            animation: pulseOrb 1.2s infinite alternate;
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes pulseOrb {
+            from { transform: scale(1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+            to { transform: scale(1.15); box-shadow: 0 0 30px rgba(239, 68, 68, 0.7); }
         }
-        
-        .voice-controls {
+
+        .transcript-live {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #fde68a;
+            font-family: monospace;
+            min-height: 20px;
+            text-align: center;
+            padding: 0 15px;
+        }
+
+        .controls-row {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        
-        .voice-button {
+
+        .btn {
             background: linear-gradient(45deg, #f59e0b, #ef4444);
             border: none;
             color: white;
-            padding: 15px 30px;
+            padding: 10px 20px;
             border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .voice-button:hover {
-            transform: scale(1.05);
-        }
-        
-        .voice-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .voice-button.active {
-            background: linear-gradient(45deg, #ef4444, #dc2626);
-            animation: recording 2s infinite;
-        }
-        
-        @keyframes recording {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-        
-        .command-list {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-        }
-        
-        .command-list h3 {
-            color: #f59e0b;
-            margin-bottom: 20px;
-        }
-        
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .command-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            transition: transform 0.3s ease;
-        }
-        
-        .command-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.2);
-        }
-        
-        .command-phrase {
-            color: #f59e0b;
-            font-weight: bold;
-            margin-bottom: 8px;
             font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .command-action {
-            color: #a0a0a0;
-            font-size: 0.85rem;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
-        
-        .transcript-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
+        }
+
+        /* Voice Commands Grid */
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .cmd-pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            max-height: 200px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .cmd-pill:hover {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+            transform: translateY(-1px);
+        }
+        .cmd-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fbbf24;
+            margin-bottom: 2px;
+        }
+        .cmd-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Virtual Desktop & Apps */
+        .workspace {
+            background: #090812;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            min-height: 280px;
+            padding: 14px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .virtual-window {
+            background: #181622;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .virtual-window.active { display: block; }
+
+        .win-bar {
+            background: #231f32;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .calc-display {
+            background: #000;
+            color: #4ade80;
+            font-family: monospace;
+            font-size: 1.3rem;
+            padding: 8px;
+            text-align: right;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .calc-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+        .calc-btn {
+            background: #2a253c;
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .calc-btn:hover { background: #3b3454; }
+
+        .transcript-log {
+            background: #06050b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            height: 120px;
             overflow-y: auto;
         }
-        
-        .transcript-line {
-            margin: 5px 0;
-            padding: 8px;
-            border-left: 3px solid #f59e0b;
-            padding-left: 12px;
-            font-size: 0.9rem;
-        }
-        
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .status-ready { background: #10b981; }
-        .status-listening { background: #f59e0b; animation: pulse 1s infinite; }
-        .status-processing { background: #3b82f6; }
-        .status-error { background: #ef4444; }
-        
-        .github-link {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .github-link a {
-            color: #f59e0b;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-        
-        .github-link a:hover {
-            text-decoration: underline;
-        }
+        .log-line { margin-bottom: 4px; }
+        .log-info { color: #38bdf8; }
+        .log-cmd { color: #facc15; }
+        .log-act { color: #4ade80; }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/projects/voice-automation-menu" class="back-nav">
+            ← Back to Project Details & Source
+        </a>
+
         <div class="header">
             <h1>Voice-Controlled Automation Menu</h1>
-            <p>A sophisticated voice-controlled automation system that manages file operations, launches applications, and provides hands-free computer control.</p>
-            <div class="tech-stack">
+            <p>Hands-free computer and browser control. Speak natural commands using the Web Speech API or click manual command triggers to launch virtual utilities.</p>
+            <div class="badges-bar">
                 <span class="tech-badge">Python</span>
-                <span class="tech-badge">Speech Recognition</span>
-                <span class="tech-badge">NLP</span>
-                <span class="tech-badge">Automation</span>
-                <span class="tech-badge">Streamlit</span>
+                <span class="tech-badge">SpeechRecognition</span>
+                <span class="tech-badge">Web Speech API</span>
+                <span class="tech-badge">Text-to-Speech Audio</span>
+                <span class="tech-badge">PyAutoGUI</span>
             </div>
         </div>
 
-        <div class="voice-interface">
-            <div class="voice-panel">
-                <h3>🎤 Voice Control Interface</h3>
-                <div class="voice-visualizer" id="voiceVisualizer">
-                    <div style="text-align: center;">
-                        <div class="status-indicator status-ready" id="statusIndicator"></div>
-                        <span id="statusText">Ready to listen</span>
-                    </div>
-                </div>
-                
-                <div class="voice-controls">
-                    <button class="voice-button" id="startButton" onclick="startListening()">Start Listening</button>
-                    <button class="voice-button" id="stopButton" onclick="stopListening()" disabled>Stop Listening</button>
-                </div>
-                
-                <div class="transcript-panel" id="transcriptPanel">
-                    <div class="transcript-line">System: Voice control initialized and ready</div>
-                    <div class="transcript-line">System: Microphone access granted</div>
-                    <div class="transcript-line">System: Waiting for voice commands...</div>
-                </div>
-            </div>
-            
-            <div class="command-list">
-                <h3>📋 Available Voice Commands</h3>
-                <div class="commands-grid">
-                    <div class="command-card">
-                        <div class="command-phrase">"Open Notepad"</div>
-                        <div class="command-action">Launches Notepad application</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Open Calculator"</div>
-                        <div class="command-action">Opens Calculator app</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Open Browser"</div>
-                        <div class="command-action">Launches default web browser</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Show Files"</div>
-                        <div class="command-action">Opens File Explorer</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Play Music"</div>
-                        <div class="command-action">Starts music player</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Volume Up"</div>
-                        <div class="command-action">Increases system volume</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Volume Down"</div>
-                        <div class="command-action">Decreases system volume</div>
-                    </div>
-                    <div class="command-card">
-                        <div class="command-phrase">"Shutdown"</div>
-                        <div class="command-action">Initiates system shutdown</div>
-                    </div>
-                </div>
+        <div class="notice-banner">
+            <div>🎙️</div>
+            <div>
+                <strong>Security Boundary Notice:</strong> This hosted demo safely executes speech recognition inside your browser and controls virtual web components. The local desktop Python application (<span style="font-family: monospace;">python voice_menu.py</span>) provides operating-system level control (SSH connections, Windows file management, WhatsApp messaging via pywhatkit).
             </div>
         </div>
 
-        <div class="github-link">
-            <a href="https://github.com/TheNikhilLuhach" target="_blank">
-                🔗 View Full Project on GitHub
-            </a>
+        <div class="main-layout">
+            <!-- Left: Voice Recognition Engine -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span>🎤 Voice Recognition Engine</span>
+                    <span id="speechSupportBadge" style="font-size: 0.75rem; color: #4ade80;">Web Speech API Ready</span>
+                </div>
+
+                <div class="visualizer-box">
+                    <div class="mic-orb" id="micOrb">🎙️</div>
+                    <div class="transcript-live" id="liveTranscript">Click "Start Listening" and speak into your microphone</div>
+                </div>
+
+                <div class="controls-row">
+                    <button class="btn" id="listenBtn" onclick="toggleListening()">
+                        <span>🎙️ Start Listening</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="stopListening()">
+                        <span>⏹️ Stop</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="toggleAudioFeedback()" id="audioToggleBtn">
+                        <span>🔊 Voice Feedback: ON</span>
+                    </button>
+                </div>
+
+                <div style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px;">
+                    Supported Voice Commands (Click to test without mic):
+                </div>
+                <div class="cmd-grid">
+                    <div class="cmd-pill" onclick="executeCommand('open notepad')">
+                        <div class="cmd-title">"Open Notepad"</div>
+                        <div class="cmd-hint">Launches virtual scratchpad</div>
+                    </div>
+                    <div class="cmd-pill" onclick="executeCommand('open calculator')">
+                        <div class="cmd-title">"Open Calculator"</div>
+                        <div class="cmd-hint">Opens interactive calculator</div>
+                    </div>
+                    <div class="cmd-pill" onclick="executeCommand('google search Next.js 14')">
+                        <div class="cmd-title">"Search for Next.js"</div>
+                        <div class="cmd-hint">Executes web search query</div>
+                    </div>
+                    <div class="cmd-pill" onclick="executeCommand('minimize all')">
+                        <div class="cmd-title">"Minimize All"</div>
+                        <div class="cmd-hint">Hides open virtual windows</div>
+                    </div>
+                    <div class="cmd-pill" onclick="executeCommand('help')">
+                        <div class="cmd-title">"Help" / "Commands"</div>
+                        <div class="cmd-hint">Lists automation capabilities</div>
+                    </div>
+                    <div class="cmd-pill" onclick="executeCommand('time')">
+                        <div class="cmd-title">"What time is it?"</div>
+                        <div class="cmd-hint">Speaks current local time</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Sandboxed Virtual Apps & Action Log -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span>🖥️ Executed Virtual Actions</span>
+                    <span style="font-size: 0.75rem; color: #fbbf24;">Live Feedback</span>
+                </div>
+
+                <div class="workspace" id="workspace">
+                    <div id="emptyWorkspaceNotice" style="text-align: center; color: #64748b; font-size: 0.85rem; padding-top: 100px;">
+                        No virtual applications open.<br>Speak a command like <em>"Open Calculator"</em> or <em>"Open Notepad"</em>.
+                    </div>
+
+                    <!-- Notepad Window -->
+                    <div class="virtual-window" id="winNotepad">
+                        <div class="win-bar">
+                            <span>📝 Virtual Notepad</span>
+                            <span style="cursor: pointer;" onclick="closeWin('winNotepad')">✕</span>
+                        </div>
+                        <div style="padding: 10px;">
+                            <textarea style="width: 100%; height: 90px; background: transparent; border: none; color: #fff; font-family: monospace; resize: none; outline: none;" placeholder="Speech-triggered notepad. Type your notes here..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Window -->
+                    <div class="virtual-window" id="winCalc" style="max-width: 240px; margin: 0 auto;">
+                        <div class="win-bar">
+                            <span>🔢 Virtual Calculator</span>
+                            <span style="cursor: pointer;" onclick="closeWin('winCalc')">✕</span>
+                        </div>
+                        <div style="padding: 10px;">
+                            <div class="calc-display" id="calcVal">0</div>
+                            <div class="calc-keys">
+                                <button class="calc-btn" onclick="calcInput('7')">7</button>
+                                <button class="calc-btn" onclick="calcInput('8')">8</button>
+                                <button class="calc-btn" onclick="calcInput('9')">9</button>
+                                <button class="calc-btn" onclick="calcInput('/')">/</button>
+                                <button class="calc-btn" onclick="calcInput('4')">4</button>
+                                <button class="calc-btn" onclick="calcInput('5')">5</button>
+                                <button class="calc-btn" onclick="calcInput('6')">6</button>
+                                <button class="calc-btn" onclick="calcInput('*')">*</button>
+                                <button class="calc-btn" onclick="calcInput('1')">1</button>
+                                <button class="calc-btn" onclick="calcInput('2')">2</button>
+                                <button class="calc-btn" onclick="calcInput('3')">3</button>
+                                <button class="calc-btn" onclick="calcInput('-')">-</button>
+                                <button class="calc-btn" onclick="calcClear()">C</button>
+                                <button class="calc-btn" onclick="calcInput('0')">0</button>
+                                <button class="calc-btn" onclick="calcEquals()">=</button>
+                                <button class="calc-btn" onclick="calcInput('+')">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-title" style="font-size: 0.95rem; margin-top: 15px; margin-bottom: 8px;">
+                    <span>📜 Speech & Automation Audit Log</span>
+                </div>
+                <div class="transcript-log" id="auditLog">
+                    <div class="log-line log-info">[System] Voice automation engine ready. Click "Start Listening".</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        let recognition = null;
         let isListening = false;
-        let recognitionTimeout;
-        
-        const voiceCommands = [
-            "Open Notepad",
-            "Open Calculator", 
-            "Open Browser",
-            "Show Files",
-            "Play Music",
-            "Volume Up",
-            "Volume Down",
-            "Shutdown"
-        ];
-        
-        const commandActions = {
-            "Open Notepad": "🚀 Launching Notepad...",
-            "Open Calculator": "🧮 Opening Calculator...",
-            "Open Browser": "🌐 Starting Web Browser...",
-            "Show Files": "📁 Opening File Explorer...",
-            "Play Music": "🎵 Starting Music Player...",
-            "Volume Up": "🔊 Increasing Volume...",
-            "Volume Down": "🔉 Decreasing Volume...",
-            "Shutdown": "⚠️ Initiating System Shutdown..."
-        };
+        let voiceFeedbackEnabled = true;
 
-        function startListening() {
-            isListening = true;
-            document.getElementById('startButton').disabled = true;
-            document.getElementById('stopButton').disabled = false;
-            
-            const startButton = document.getElementById('startButton');
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const visualizer = document.getElementById('voiceVisualizer');
-            
-            startButton.classList.add('active');
-            statusIndicator.className = 'status-indicator status-listening';
-            statusText.textContent = 'Listening...';
-            
-            // Add voice wave animation
-            visualizer.innerHTML = `
-                <div style="text-align: center;">
-                    <div class="voice-wave"></div>
-                    <div class="voice-wave" style="animation-delay: 0.2s;"></div>
-                    <div class="voice-wave" style="animation-delay: 0.4s;"></div>
-                    <div style="margin-top: 20px; color: #f59e0b;">🎤 Listening for commands...</div>
-                </div>
-            `;
-            
-            addTranscript("System: Voice recognition activated", "info");
-            
-            // Simulate voice recognition
-            recognitionTimeout = setTimeout(() => {
-                if (isListening) {
-                    const randomCommand = voiceCommands[Math.floor(Math.random() * voiceCommands.length)];
-                    processCommand(randomCommand);
+        // Initialize Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                let final = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
                 }
-            }, 3000);
+
+                const liveEl = document.getElementById('liveTranscript');
+                if (final) {
+                    liveEl.textContent = `Recognized: "${final}"`;
+                    executeCommand(final);
+                } else if (interim) {
+                    liveEl.textContent = `Hearing: "${interim}..."`;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                logAudit(`Microphone error: ${event.error}`, 'info');
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                if (isListening) {
+                    // Auto-restart if continuous
+                    recognition.start();
+                }
+            };
+        } else {
+            document.getElementById('speechSupportBadge').textContent = 'Web Speech not supported in this browser (use buttons)';
+            document.getElementById('speechSupportBadge').style.color = '#f87171';
+        }
+
+        function toggleListening() {
+            if (!recognition) {
+                alert('Your browser does not support the Web Speech API. Please use the manual command buttons below.');
+                return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                try {
+                    recognition.start();
+                    isListening = true;
+                    document.getElementById('micOrb').classList.add('listening');
+                    document.getElementById('listenBtn').innerHTML = '<span>🔴 Listening...</span>';
+                    document.getElementById('liveTranscript').textContent = 'Listening for commands... Speak clearly.';
+                    logAudit('Speech recognition active. Listening for voice input...', 'info');
+                } catch (e) {
+                    console.error(e);
+                }
+            }
         }
 
         function stopListening() {
-            isListening = false;
-            document.getElementById('startButton').disabled = false;
-            document.getElementById('stopButton').disabled = true;
-            
-            const startButton = document.getElementById('startButton');
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const visualizer = document.getElementById('voiceVisualizer');
-            
-            startButton.classList.remove('active');
-            statusIndicator.className = 'status-indicator status-ready';
-            statusText.textContent = 'Ready to listen';
-            
-            visualizer.innerHTML = `
-                <div style="text-align: center;">
-                    <div class="status-indicator status-ready"></div>
-                    <span>Ready to listen</span>
-                </div>
-            `;
-            
-            if (recognitionTimeout) {
-                clearTimeout(recognitionTimeout);
+            if (recognition && isListening) {
+                isListening = false;
+                recognition.stop();
             }
-            
-            addTranscript("System: Voice recognition stopped", "warning");
+            document.getElementById('micOrb').classList.remove('listening');
+            document.getElementById('listenBtn').innerHTML = '<span>🎙️ Start Listening</span>';
+            document.getElementById('liveTranscript').textContent = 'Listening paused.';
+            logAudit('Speech recognition stopped.', 'info');
         }
 
-        function processCommand(command) {
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            
-            statusIndicator.className = 'status-indicator status-processing';
-            statusText.textContent = 'Processing...';
-            
-            addTranscript(`Recognized: "${command}"`, 'success');
-            
-            setTimeout(() => {
-                const action = commandActions[command];
-                if (action) {
-                    addTranscript(action, 'info');
-                    
-                    // Reset to listening state
-                    statusIndicator.className = 'status-indicator status-listening';
-                    statusText.textContent = 'Listening...';
-                    
-                    // Continue listening for more commands
-                    if (isListening) {
-                        recognitionTimeout = setTimeout(() => {
-                            if (isListening) {
-                                const randomCommand = voiceCommands[Math.floor(Math.random() * voiceCommands.length)];
-                                processCommand(randomCommand);
-                            }
-                        }, 4000);
-                    }
-                }
-            }, 1000);
+        function speak(text) {
+            if (!voiceFeedbackEnabled || !window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
         }
 
-        function addTranscript(message, type = 'info') {
-            const transcriptPanel = document.getElementById('transcriptPanel');
+        function toggleAudioFeedback() {
+            voiceFeedbackEnabled = !voiceFeedbackEnabled;
+            document.getElementById('audioToggleBtn').textContent = voiceFeedbackEnabled 
+                ? '🔊 Voice Feedback: ON' 
+                : '🔇 Voice Feedback: OFF';
+        }
+
+        function executeCommand(rawPhrase) {
+            const phrase = rawPhrase.toLowerCase().trim();
+            logAudit(`Command Trigger: "${phrase}"`, 'cmd');
+
+            const emptyNotice = document.getElementById('emptyWorkspaceNotice');
+
+            if (phrase.includes('notepad') || phrase.includes('notes')) {
+                document.getElementById('winNotepad').classList.add('active');
+                emptyNotice.style.display = 'none';
+                logAudit('Action: Opened Virtual Notepad.', 'act');
+                speak('Opening Notepad');
+            } else if (phrase.includes('calculator') || phrase.includes('calc')) {
+                document.getElementById('winCalc').classList.add('active');
+                emptyNotice.style.display = 'none';
+                logAudit('Action: Opened Virtual Calculator.', 'act');
+                speak('Opening Calculator');
+            } else if (phrase.includes('search') || phrase.includes('google')) {
+                const query = phrase.replace(/.*(?:search for|search|google)/i, '').trim() || 'Next.js';
+                logAudit(`Action: Executing web search query for "${query}"`, 'act');
+                speak(`Searching for ${query}`);
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            } else if (phrase.includes('minimize') || phrase.includes('close all') || phrase.includes('hide')) {
+                document.querySelectorAll('.virtual-window').forEach(w => w.classList.remove('active'));
+                emptyNotice.style.display = 'block';
+                logAudit('Action: Minimized all virtual windows.', 'act');
+                speak('Minimizing all windows');
+            } else if (phrase.includes('time') || phrase.includes('clock')) {
+                const now = new Date().toLocaleTimeString();
+                logAudit(`Action: Current time is ${now}`, 'act');
+                speak(`The time is ${now}`);
+            } else if (phrase.includes('help') || phrase.includes('command')) {
+                logAudit('Action: Available commands: Notepad, Calculator, Google Search, Minimize, Time.', 'act');
+                speak('Available commands include: Open Notepad, Open Calculator, Google Search, and Minimize All.');
+            } else {
+                logAudit(`Unrecognized phrase: "${phrase}". Say "help" for options.`, 'info');
+            }
+        }
+
+        function closeWin(id) {
+            document.getElementById(id).classList.remove('active');
+            const openWins = document.querySelectorAll('.virtual-window.active');
+            if (openWins.length === 0) {
+                document.getElementById('emptyWorkspaceNotice').style.display = 'block';
+            }
+        }
+
+        function logAudit(msg, type = 'info') {
+            const logBox = document.getElementById('auditLog');
             const line = document.createElement('div');
-            line.className = 'transcript-line';
-            
-            const timestamp = new Date().toLocaleTimeString();
-            const icons = {
-                'info': '🔵',
-                'success': '🟢', 
-                'warning': '🟡',
-                'error': '🔴'
-            };
-            
-            line.textContent = `${icons[type]} ${timestamp} - ${message}`;
-            transcriptPanel.appendChild(line);
-            transcriptPanel.scrollTop = transcriptPanel.scrollHeight;
+            line.className = `log-line log-${type}`;
+            const time = new Date().toLocaleTimeString();
+            line.textContent = `[${time}] ${msg}`;
+            logBox.appendChild(line);
+            logBox.scrollTop = logBox.scrollHeight;
         }
 
-        // Add keyboard shortcut for spacebar to toggle listening
-        document.addEventListener('keydown', function(e) {
-            if (e.code === 'Space' && e.target === document.body) {
-                e.preventDefault();
-                if (isListening) {
-                    stopListening();
-                } else {
-                    startListening();
+        // Calculator Logic
+        let calcExpr = '';
+        function calcInput(char) {
+            if (calcExpr === '0' && char !== '.') calcExpr = '';
+            calcExpr += char;
+            document.getElementById('calcVal').textContent = calcExpr;
+        }
+        function calcClear() {
+            calcExpr = '0';
+            document.getElementById('calcVal').textContent = calcExpr;
+        }
+        function calcEquals() {
+            try {
+                // Safely evaluate simple arithmetic
+                if (/^[0-9+\-*/. ]+$/.test(calcExpr)) {
+                    calcExpr = String(Function(`'use strict'; return (${calcExpr})`)());
+                    document.getElementById('calcVal').textContent = calcExpr;
+                    speak(`Result is ${calcExpr}`);
                 }
+            } catch (e) {
+                document.getElementById('calcVal').textContent = 'Error';
+                calcExpr = '';
             }
-        });
-
-        // Add interactive hover effects to command cards
-        document.querySelectorAll('.command-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-            
-            card.addEventListener('click', function() {
-                const command = this.querySelector('.command-phrase').textContent.replace(/"/g, '');
-                addTranscript(`Manual command: "${command}"`, 'info');
-                processCommand(command);
-            });
-        });
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart File Management Utility — Interactive Web Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #090e17 0%, #111a28 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 6px 14px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header p { color: #94a3b8; font-size: 0.95rem; }
+        .panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .file-tree {
+            background: #060911;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            min-height: 220px;
+        }
+        .file-item {
+            padding: 6px 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .file-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .btn {
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .input-text {
+            background: #090e18;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/projects/file-manager" class="back-nav">← Back to Project Details</a>
+        <div class="header">
+            <h1>Smart File Management Utility</h1>
+            <p>Python Gradio file auditing tool. Calculates recursive directory sizes, item counts, and simulates structured file operations.</p>
+        </div>
+
+        <div class="panel">
+            <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+                <input type="text" id="newFileName" class="input-text" placeholder="Enter file name (e.g. report.pdf)..." style="flex: 1;">
+                <button class="btn" onclick="addFile()">+ Add Virtual File</button>
+                <button class="btn" onclick="addFolder()" style="background: rgba(255,255,255,0.08);">+ Add Folder</button>
+                <button class="btn" onclick="resetFiles()" style="background: rgba(239,68,68,0.2); color: #f87171;">Reset</button>
+            </div>
+
+            <div class="file-tree" id="fileTree">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let virtualFileSystem = [
+            { name: 'projects/', isDir: true, size: '24.5 MB', items: 18 },
+            { name: 'documents/', isDir: true, size: '4.2 MB', items: 6 },
+            { name: 'resume_nikhil_kumar.pdf', isDir: false, size: '11.4 KB', modified: '2026-10-28 14:49' },
+            { name: 'hand_gesture_control.py', isDir: false, size: '5.8 KB', modified: '2026-10-28 12:15' },
+            { name: 'voice_menu.py', isDir: false, size: '25.4 KB', modified: '2026-10-28 11:30' },
+            { name: 'requirements.txt', isDir: false, size: '320 bytes', modified: '2026-10-28 14:10' }
+        ];
+
+        function render() {
+            const tree = document.getElementById('fileTree');
+            tree.innerHTML = virtualFileSystem.map((f, i) => `
+                <div class="file-item">
+                    <span>${f.isDir ? '📁' : '📄'} <strong>${f.name}</strong></span>
+                    <span style="color: #94a3b8; font-size: 0.75rem;">
+                        ${f.size} ${f.items ? `(${f.items} items)` : ''} ${f.modified ? `• ${f.modified}` : ''}
+                        <button onclick="deleteFile(${i})" style="background: transparent; border: none; color: #ef4444; margin-left: 10px; cursor: pointer;">✕</button>
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function addFile() {
+            const input = document.getElementById('newFileName');
+            const name = input.value.trim();
+            if (!name) return;
+            virtualFileSystem.push({ name, isDir: false, size: '1.2 KB', modified: new Date().toLocaleTimeString() });
+            input.value = '';
+            render();
+        }
+
+        function addFolder() {
+            const input = document.getElementById('newFileName');
+            let name = input.value.trim();
+            if (!name) return;
+            if (!name.endsWith('/')) name += '/';
+            virtualFileSystem.push({ name, isDir: true, size: '0 bytes', items: 0 });
+            input.value = '';
+            render();
+        }
+
+        function deleteFile(idx) {
+            virtualFileSystem.splice(idx, 1);
+            render();
+        }
+
+        function resetFiles() {
+            virtualFileSystem = [
+                { name: 'projects/', isDir: true, size: '24.5 MB', items: 18 },
+                { name: 'documents/', isDir: true, size: '4.2 MB', items: 6 },
+                { name: 'resume_nikhil_kumar.pdf', isDir: false, size: '11.4 KB', modified: '2026-10-28 14:49' }
+            ];
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>

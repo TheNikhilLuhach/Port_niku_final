@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Infrastructure & Automation — Web Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #090e17 0%, #151a28 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #f97316;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 6px 14px;
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 20px;
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #f97316, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header p { color: #94a3b8; font-size: 0.95rem; }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .instance-row {
+            background: #090f1d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        .status-running { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-stopped { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .btn {
+            background: linear-gradient(45deg, #f97316, #fbbf24);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/projects/cloud-infrastructure-automation" class="back-nav">← Back to Project Details</a>
+        <div class="header">
+            <h1>Cloud Infrastructure & Automation Workflows</h1>
+            <p>AWS EC2 instance state monitoring, automated start/stop scheduler, and Linux resource auditing.</p>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; color: #fdba74; margin-bottom: 14px;">AWS EC2 Instances Simulation (ap-south-1)</h3>
+            <div id="instancesList"></div>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8;">
+                <em>Automated via Python Boto3 SDK & Linux systemd cron timers in production.</em>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const instances = [
+            { id: 'i-0a8b9c1d2e3f4a5b6', name: 'web-prod-nextjs-01', type: 't3.medium', state: 'running' },
+            { id: 'i-0b7c8d9e0f1a2b3c4', name: 'api-flask-worker-01', type: 't3.small', state: 'running' },
+            { id: 'i-0c6d7e8f9a0b1c2d3', name: 'db-standby-replica', type: 't3.large', state: 'stopped' }
+        ];
+
+        function render() {
+            document.getElementById('instancesList').innerHTML = instances.map((inst, i) => `
+                <div class="instance-row">
+                    <div>
+                        <div style="font-weight: bold; color: #ffffff;">${inst.name} (${inst.id})</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">Instance Type: ${inst.type} • Region: Asia Pacific (Mumbai)</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="status-badge ${inst.state === 'running' ? 'status-running' : 'status-stopped'}">${inst.state.toUpperCase()}</span>
+                        <button class="btn" onclick="toggleState(${i})">${inst.state === 'running' ? 'Stop Instance' : 'Start Instance'}</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleState(idx) {
+            instances[idx].state = instances[idx].state === 'running' ? 'stopped' : 'running';
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
