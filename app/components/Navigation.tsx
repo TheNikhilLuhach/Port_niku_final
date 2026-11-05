@@ -2,12 +2,12 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Menu, X, Github, Rocket, FileDown, FileCode2 } from 'lucide-react';
+import { Menu, X, Github, FileDown, FileCode2, ArrowUpRight } from 'lucide-react';
 
 const navLinks = [
-  { label: 'Home', href: '#home' },
+  { label: 'Overview', href: '#home' },
   { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
+  { label: 'Competencies', href: '#skills' },
   { label: 'Projects', href: '#projects' },
   { label: 'Experience', href: '#experience' },
   { label: 'Contact', href: '#contact' },
@@ -20,15 +20,14 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
 
-      // Update active section based on scroll position
       const sections = navLinks.map((link) => link.href.slice(1));
       for (const section of sections.reverse()) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          if (rect.top <= 150) {
+          if (rect.top <= 140) {
             setActiveSection(section);
             break;
           }
@@ -50,154 +49,144 @@ export default function Navigation() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'py-3 glass-strong'
-            : 'py-5 bg-transparent'
-        }`}
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <motion.a
+      <header className="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-[#111827]/90 backdrop-blur-md border-b border-[#8B9BB4]/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            
+            {/* Logo / Monogram */}
+            <a
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection('#home');
               }}
-              whileHover={{ scale: 1.02 }}
-              className="flex items-center gap-2 text-xl font-bold text-white"
+              className="flex items-center gap-3 group"
             >
-              <span className="text-accent-cyan">Nikhil</span>
-              <Rocket className="w-5 h-5 text-accent-cyan" />
-            </motion.a>
+              <div className="w-8 h-8 rounded border border-[#8B9BB4]/30 bg-[#161F33] flex items-center justify-center font-mono text-xs font-semibold text-[#E9EDF5]">
+                NK
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold tracking-tight text-[#E9EDF5] group-hover:text-white transition-colors">
+                  Nikhil Kumar
+                </span>
+                <span className="text-[10px] font-mono tracking-widest text-[#8B9BB4] uppercase">
+                  Systems &amp; Cloud
+                </span>
+              </div>
+            </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <button
-                  key={link.label}
-                  onClick={() => scrollToSection(link.href)}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors ${
-                    activeSection === link.href.slice(1)
-                      ? 'text-accent-cyan'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                  {activeSection === link.href.slice(1) && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-accent-cyan/10 rounded-lg -z-10"
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href.slice(1);
+                return (
+                  <button
+                    key={link.label}
+                    onClick={() => scrollToSection(link.href)}
+                    className={`text-xs font-medium tracking-wide transition-colors py-1 relative ${
+                      isActive ? 'text-[#E9EDF5]' : 'text-[#8B9BB4] hover:text-[#E9EDF5]'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {isActive && (
+                      <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#E9EDF5]" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
 
-            {/* Resume & GitHub Buttons */}
-            <div className="hidden md:flex items-center gap-3">
-              <motion.a
+            {/* Actions: Primary & Secondary Buttons */}
+            <div className="hidden sm:flex items-center gap-3">
+              {/* Primary Action Button: Soft Ice background with Midnight Navy text */}
+              <a
                 href="/resume/Nikhil_Kumar_Resume.pdf"
                 download="Nikhil_Kumar_Resume.pdf"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-accent-cyan/20 to-accent-purple/20 border border-accent-cyan/40 text-accent-cyan hover:text-white transition-all text-sm font-medium shadow-sm hover:shadow-accent-cyan/20"
+                className="btn-primary text-xs py-2 px-3.5"
               >
-                <FileDown className="w-4 h-4" />
-                Resume (PDF)
-              </motion.a>
+                <FileDown className="w-3.5 h-3.5" />
+                <span>Resume (PDF)</span>
+              </a>
 
-              <motion.a
+              {/* Secondary Action: LaTeX Source */}
+              <a
                 href="/resume/Nikhil_Kumar_Resume.tex"
                 download="Nikhil_Kumar_Resume.tex"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-dark-700/30 border border-gray-600 text-gray-300 hover:text-white transition-all text-sm font-medium"
+                title="Download ATS LaTeX Source"
+                className="btn-secondary text-xs py-2 px-3 font-mono"
               >
-                <FileCode2 className="w-4 h-4" />
-                Resume (.tex)
-              </motion.a>
+                <FileCode2 className="w-3.5 h-3.5" />
+                <span>.tex</span>
+              </a>
 
-              <motion.a
+              {/* GitHub */}
+              <a
                 href="https://github.com/TheNikhilLuhach"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-lg glass text-gray-300 hover:text-white hover:border-accent-cyan/50 transition-all text-sm font-medium"
+                className="p-2 rounded border border-[#8B9BB4]/25 text-[#8B9BB4] hover:text-[#E9EDF5] hover:border-[#8B9BB4]/50 transition-colors"
+                aria-label="GitHub profile"
               >
                 <Github className="w-4 h-4" />
-                GitHub
-              </motion.a>
+              </a>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg glass text-gray-300 hover:text-white"
+              className="md:hidden p-2 rounded border border-[#8B9BB4]/25 text-[#8B9BB4] hover:text-[#E9EDF5]"
+              aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5 text-[#E9EDF5]" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
-      </motion.nav>
+      </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 md:hidden"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-x-0 top-16 sm:top-20 z-40 md:hidden bg-[#161F33] border-b border-[#8B9BB4]/20 p-5 shadow-2xl"
           >
-            <div className="mx-4 p-4 glass-strong rounded-2xl">
-              {navLinks.map((link, index) => (
-                <motion.button
-                  key={link.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => scrollToSection(link.href)}
-                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    activeSection === link.href.slice(1)
-                      ? 'bg-accent-cyan/10 text-accent-cyan'
-                      : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                </motion.button>
-              ))}
-              
-              <div className="pt-2 border-t border-dark-600 mt-2 space-y-2">
-                <motion.a
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 pb-3 border-b border-[#8B9BB4]/15">
+                {navLinks.map((link) => (
+                  <button
+                    key={link.label}
+                    onClick={() => scrollToSection(link.href)}
+                    className={`text-left px-3 py-2 text-xs font-medium rounded transition-colors ${
+                      activeSection === link.href.slice(1)
+                        ? 'bg-[#1E293B] text-[#E9EDF5]'
+                        : 'text-[#8B9BB4] hover:text-[#E9EDF5]'
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2 pt-1">
+                <a
                   href="/resume/Nikhil_Kumar_Resume.pdf"
                   download="Nikhil_Kumar_Resume.pdf"
-                  className="flex items-center gap-2 px-4 py-3 rounded-lg bg-accent-cyan/15 text-accent-cyan text-sm font-medium"
+                  className="btn-primary text-xs w-full py-2.5"
                 >
-                  <FileDown className="w-4 h-4" />
-                  Download Resume (PDF)
-                </motion.a>
-                <motion.a
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  href="https://github.com/TheNikhilLuhach"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-3 rounded-lg glass text-gray-300 text-sm font-medium"
+                  <FileDown className="w-3.5 h-3.5" />
+                  <span>Download Resume (PDF)</span>
+                </a>
+                <a
+                  href="/resume/Nikhil_Kumar_Resume.tex"
+                  download="Nikhil_Kumar_Resume.tex"
+                  className="btn-secondary text-xs w-full py-2.5 font-mono"
                 >
-                  <Github className="w-4 h-4" />
-                  View GitHub
-                </motion.a>
+                  <FileCode2 className="w-3.5 h-3.5" />
+                  <span>Download LaTeX (.tex) Source</span>
+                </a>
               </div>
             </div>
           </motion.div>
