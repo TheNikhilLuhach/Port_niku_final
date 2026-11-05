@@ -1,294 +1,357 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, ChevronDown, Terminal, Shield, Cloud, Code2, FileDown, FileCode2 } from 'lucide-react';
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Github, Linkedin, Mail, ArrowRight, FileDown, 
+  ChevronDown, GraduationCap, Server, Cloud, Cpu, Terminal, FolderGit2
+} from 'lucide-react';
+import {
+  luxuryEase, MaskReveal, FadeUp, CinematicNameReveal,
+  AmbientParticles, SpotlightCard, MagneticButton, AnimatedCounter
+} from '@/components/motion/MotionPrimitives';
 
-const skills = [
-  'Software Engineer',
-  'Python Developer',
-  'Cloud & DevOps Engineer',
-  'Generative AI Specialist',
-  'Workflow Automation Expert',
+interface FocusTab {
+  id: string;
+  label: string;
+  icon: typeof Server;
+  headline: string;
+  stack: string[];
+  architecture: string;
+  featuredProject: { name: string; slug: string };
+}
+
+const focusDomains: FocusTab[] = [
+  {
+    id: 'backend',
+    label: 'Backend & APIs',
+    icon: Server,
+    headline: 'Modular Python microservices, REST APIs & relational databases',
+    stack: ['Python 3.10+', 'Flask', 'SQLAlchemy', 'PostgreSQL / SQLite', 'REST APIs'],
+    architecture: 'Clean service architecture, strict request schema validation, connection pooling, and decoupled business logic.',
+    featuredProject: { name: 'CareerPilot Platform', slug: 'careerpilot' },
+  },
+  {
+    id: 'cloud',
+    label: 'Cloud & DevOps',
+    icon: Cloud,
+    headline: 'AWS cloud infrastructure, containerization & Linux administration',
+    stack: ['Amazon EC2', 'Amazon S3', 'IAM Policies', 'Docker Containers', 'Linux / Bash'],
+    architecture: 'Reproducible Docker environments, least-privilege IAM credentials, and Linux server orchestration.',
+    featuredProject: { name: 'Cloud Automation Workflows', slug: 'cloud-automation' },
+  },
+  {
+    id: 'ai',
+    label: 'Applied AI & Vision',
+    icon: Cpu,
+    headline: 'Real-time computer vision & structured LLM integrations',
+    stack: ['Google Gemini 2.0', 'MediaPipe', 'OpenCV', 'Streamlit', 'Python Async'],
+    architecture: '30 FPS 21-landmark 3D hand tracking, debounced gesture classification, and schema-constrained LLM prompting.',
+    featuredProject: { name: 'Hand Gesture Control', slug: 'hand-gesture-control' },
+  },
+  {
+    id: 'automation',
+    label: 'Automation Tools',
+    icon: Terminal,
+    headline: 'Desktop automation, intelligent utilities & audio workflows',
+    stack: ['PyAutoGUI', 'SpeechRecognition', 'Gradio', 'Python OS / Subprocess'],
+    architecture: 'Non-blocking worker loops, debounced trigger detection, and local system automation scripts.',
+    featuredProject: { name: 'Smart File Management', slug: 'file-management-utility' },
+  },
+];
+
+const stats = [
+  { value: 5, suffix: '', label: 'Internships' },
+  { value: 8, suffix: '', label: 'Projects Built' },
+  { value: 15, suffix: '+', label: 'Technologies' },
 ];
 
 export default function Hero() {
-  const [currentSkill, setCurrentSkill] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // Typing animation
-  useEffect(() => {
-    const skill = skills[currentSkill];
-    const typeSpeed = isDeleting ? 40 : 80;
-
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        setDisplayText(skill.slice(0, displayText.length + 1));
-        if (displayText.length === skill.length - 1) {
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      } else {
-        setDisplayText(skill.slice(0, displayText.length - 1));
-        if (displayText.length === 1) {
-          setIsDeleting(false);
-          setCurrentSkill((prev) => (prev + 1) % skills.length);
-        }
-      }
-    }, typeSpeed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, currentSkill]);
-
-  // Particle animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    interface Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      color: string;
-    }
-
-    const particles: Particle[] = [];
-    const colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#10b981'];
-
-    for (let i = 0; i < 40; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 2.5 + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    }
-
-    let animationId: number;
-    const animate = () => {
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.15)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach((particle, i) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-
-        // Connect particles
-        particles.slice(i + 1).forEach((other) => {
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${0.12 * (1 - dist / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        });
-      });
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationId);
-    };
-  }, []);
+  const [activeTab, setActiveTab] = useState<string>('backend');
+  const currentDomain = focusDomains.find((d) => d.id === activeTab) || focusDomains[0];
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
+    <section className="relative min-h-screen pt-28 pb-16 flex flex-col justify-between hero-atmosphere overflow-hidden">
+
+      {/* ── Grid overlay ── */}
+      <div className="absolute inset-0 midnight-grid-overlay opacity-60 pointer-events-none" />
+
+      {/* ── Animated background orbs ── */}
+      <motion.div
+        className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(119,146,181,0.14) 0%, rgba(21,28,43,0.4) 50%, transparent 80%)',
+          filter: 'blur(90px)',
+        }}
+        animate={{ scale: [1, 1.06, 1], x: [0, 20, 0], y: [0, -15, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute top-[20%] left-[-8%] w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(140,63,77,0.18) 0%, transparent 70%)',
+          filter: 'blur(100px)',
+        }}
+        animate={{ scale: [1, 1.08, 1], x: [0, -15, 0], y: [0, 20, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+      />
+      <motion.div
+        className="absolute bottom-[10%] right-[20%] w-[400px] h-[400px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(198,161,91,0.1) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+        }}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
       />
 
-      {/* Gradient Overlays */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-cyan/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple/15 rounded-full blur-3xl pointer-events-none" />
+      {/* ── Ambient particles ── */}
+      <AmbientParticles count={18} />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="max-w-4xl mx-auto"
-        >
-          {/* Status Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 border border-emerald-500/30"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-sm text-gray-300">B.Tech CSE • Amity University (2023–2027)</span>
-          </motion.div>
-
-          {/* Name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 tracking-tight"
-          >
-            <span className="text-white">Hi, I&apos;m </span>
-            <span className="bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-pink bg-clip-text text-transparent">
-              Nikhil Kumar
-            </span>
-          </motion.h1>
-
-          {/* Typing Animation */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="h-14 sm:h-16 mb-6"
-          >
-            <span className="text-xl sm:text-2xl lg:text-3xl text-gray-300 font-light">
-              {displayText}
-              <span className="inline-block w-0.5 h-6 sm:h-8 bg-accent-cyan ml-1 animate-pulse" />
-            </span>
-          </motion.div>
-
-          {/* Headline description */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            Building high-performance Python services, cloud infrastructure on AWS, and production web applications. Experienced in computer vision interfaces, Generative AI models, and automated engineering workflows.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6"
-          >
-            <button
-              onClick={() => scrollToSection('projects')}
-              className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-full font-semibold text-white hover:shadow-lg hover:shadow-accent-cyan/25 transition-all duration-300 flex items-center justify-center gap-2 text-sm"
-            >
-              <Code2 className="w-4 h-4" />
-              Explore Projects
-            </button>
-
-            <a
-              href="/resume/Nikhil_Kumar_Resume.pdf"
-              download="Nikhil_Kumar_Resume.pdf"
-              className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-accent-purple to-pink-600 rounded-full font-semibold text-white hover:shadow-lg hover:shadow-accent-purple/25 transition-all duration-300 flex items-center justify-center gap-2 text-sm"
-            >
-              <FileDown className="w-4 h-4" />
-              Download Resume (PDF)
-            </a>
-
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="w-full sm:w-auto px-7 py-3.5 glass rounded-full font-semibold text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 text-sm"
-            >
-              <Mail className="w-4 h-4" />
-              Get in Touch
-            </button>
-          </motion.div>
-
-          {/* LaTeX Resume download link */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.0 }}
-            className="mb-10 text-xs text-gray-500"
-          >
-            Need the ATS LaTeX source?{' '}
-            <a
-              href="/resume/Nikhil_Kumar_Resume.tex"
-              download="Nikhil_Kumar_Resume.tex"
-              className="text-accent-cyan hover:underline inline-flex items-center gap-1 font-mono"
-            >
-              <FileCode2 className="w-3.5 h-3.5 inline" /> Download Nikhil_Kumar_Resume.tex
-            </a>
-          </motion.div>
-
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1 }}
-            className="flex justify-center gap-5"
-          >
-            {[
-              { icon: Github, href: 'https://github.com/TheNikhilLuhach', label: 'GitHub' },
-              { icon: Linkedin, href: 'https://www.linkedin.com/in/nikhil-kumar-692116203', label: 'LinkedIn' },
-              { icon: Mail, href: 'mailto:nikuluhach.86209@gmail.com', label: 'Email' },
-            ].map((social, index) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                target={social.href.startsWith('http') ? '_blank' : undefined}
-                rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 + index * 0.1 }}
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="w-11 h-11 glass rounded-full flex items-center justify-center text-gray-400 hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300"
-                aria-label={social.label}
-              >
-                <social.icon className="w-4 h-4" />
-              </motion.a>
-            ))}
-          </motion.div>
-        </motion.div>
+      {/* ── Light sweep across name ── */}
+      <div className="absolute top-[30%] left-0 right-0 h-[2px] pointer-events-none overflow-hidden opacity-20">
+        <div className="animate-light-sweep absolute inset-0 bg-gradient-to-r from-transparent via-[#DEC186] to-transparent" />
       </div>
 
-      {/* Scroll indicator */}
-      <motion.button
-        onClick={() => scrollToSection('about')}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-gray-500 hover:text-accent-cyan transition-colors"
-        aria-label="Scroll to About section"
-      >
-        <ChevronDown className="w-6 h-6 animate-bounce" />
-      </motion.button>
+      {/* ── Main content ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto relative z-10">
+
+        {/* Top badge */}
+        <FadeUp delay={0.05}>
+          <div className="inline-flex items-center gap-3 px-3.5 py-1.5 mb-8 rounded-[2px] glass-panel border border-[#7792B5]/20">
+            <span className="w-2 h-2 rounded-full bg-[#C6A15B] animate-pulse" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#C6A15B]">Engineering Portfolio</span>
+            <span className="h-3 w-px bg-[#7792B5]/30" />
+            <span className="text-[10px] font-mono text-[#858A96]">Jaipur, India · 2026</span>
+          </div>
+        </FadeUp>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+
+          {/* ── LEFT: Identity ── */}
+          <div className="lg:col-span-7 space-y-8">
+
+            {/* Name */}
+            <div className="space-y-3">
+              <CinematicNameReveal
+                text="NIKHIL KUMAR"
+                className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-gold-shimmer leading-[0.88] drop-shadow-lg select-none"
+              />
+              <MaskReveal delay={0.4}>
+                <div className="flex flex-wrap items-center gap-2 text-sm sm:text-lg font-light tracking-wide text-[#7792B5]">
+                  <span>Python Developer</span>
+                  <span className="text-[#8C3F4D] text-xs">&bull;</span>
+                  <span>Backend Engineer</span>
+                  <span className="text-[#8C3F4D] text-xs">&bull;</span>
+                  <span>Cloud &amp; Applied AI</span>
+                </div>
+              </MaskReveal>
+            </div>
+
+            {/* Paragraph */}
+            <FadeUp delay={0.45}>
+              <p className="text-sm sm:text-base text-[#D6D3CC]/85 leading-relaxed max-w-xl font-light gold-line-left border-[#C6A15B]/30">
+                Final-year B.Tech Computer Science student at Amity University Rajasthan. I build practical software — from backend APIs and cloud infrastructure to AI-driven automation tools and computer vision systems. I enjoy turning ideas into real, working products.
+              </p>
+            </FadeUp>
+
+            {/* Academic credential */}
+            <FadeUp delay={0.52}>
+              <div className="flex items-center gap-3.5 p-3.5 max-w-lg glass-panel border border-[#7792B5]/20 rounded-[2px]">
+                <div className="w-9 h-9 rounded-[2px] bg-[#090B10] border border-[#C6A15B]/35 flex items-center justify-center text-[#C6A15B] shrink-0">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <div className="text-xs font-mono">
+                  <div className="text-[#EBE8E1] font-medium flex items-center gap-2">
+                    <span>B.Tech Computer Science &amp; Engineering</span>
+                    <span className="text-[10px] text-[#C6A15B] bg-[#C6A15B]/10 px-1.5 py-0.5 rounded border border-[#C6A15B]/25 font-semibold">2023–2027</span>
+                  </div>
+                  <div className="text-[#858A96] text-[11px] mt-0.5">Amity University Rajasthan &bull; Jaipur Campus</div>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Animated Stat Counters */}
+            <FadeUp delay={0.58}>
+              <div className="grid grid-cols-3 gap-4 max-w-sm">
+                {stats.map((s, i) => (
+                  <div key={s.label} className="text-center p-3 rounded-[2px] bg-[#151C2B]/50 border border-[#7792B5]/12">
+                    <div className="font-serif text-2xl sm:text-3xl text-[#C6A15B] font-medium leading-none">
+                      <AnimatedCounter value={s.value} suffix={s.suffix} />
+                    </div>
+                    <div className="text-[10px] font-mono text-[#858A96] uppercase tracking-wider mt-1">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </FadeUp>
+
+            {/* CTAs */}
+            <FadeUp delay={0.65}>
+              <div className="flex flex-wrap items-center gap-4">
+                <MagneticButton>
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => scrollToSection('projects')}
+                    className="btn-luxury-gold btn-magnetic py-3.5 px-7 text-xs sm:text-sm cursor-pointer"
+                  >
+                    <span>Explore My Work</span>
+                    <ArrowRight className="w-4 h-4 text-[#090B10]" />
+                  </motion.button>
+                </MagneticButton>
+                <MagneticButton>
+                  <motion.a
+                    whileTap={{ scale: 0.97 }}
+                    href="/resume/Nikhil_Kumar_Resume.pdf"
+                    download="Nikhil_Kumar_Resume.pdf"
+                    className="btn-luxury-secondary py-3.5 px-6 text-xs sm:text-sm"
+                  >
+                    <FileDown className="w-4 h-4 text-[#C6A15B]" />
+                    <span>View Resume</span>
+                  </motion.a>
+                </MagneticButton>
+              </div>
+            </FadeUp>
+
+            {/* Social links */}
+            <FadeUp delay={0.72}>
+              <div className="flex items-center gap-5 text-xs font-mono text-[#858A96] border-t border-[#7792B5]/15 pt-5 max-w-sm">
+                {[
+                  { href: 'https://github.com/TheNikhilLuhach', Icon: Github, label: 'GitHub' },
+                  { href: 'https://www.linkedin.com/in/nikhil-kumar-692116203', Icon: Linkedin, label: 'LinkedIn' },
+                  { href: 'mailto:nikuluhach.86209@gmail.com', Icon: Mail, label: 'Email' },
+                ].map(({ href, Icon, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith('http') ? '_blank' : undefined}
+                    rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="flex items-center gap-1.5 hover:text-[#C6A15B] transition-all duration-300 group hover:-translate-y-0.5"
+                  >
+                    <Icon className="w-3.5 h-3.5 text-[#7792B5] group-hover:text-[#C6A15B]" />
+                    <span className="group-hover:underline">{label}</span>
+                  </a>
+                ))}
+              </div>
+            </FadeUp>
+          </div>
+
+          {/* ── RIGHT: Interactive Architecture Console ── */}
+          <div className="lg:col-span-5">
+            <FadeUp delay={0.4} duration={0.9}>
+              <SpotlightCard
+                spotlightColor="rgba(198, 161, 91, 0.16)"
+                className="editorial-card-elevated p-6 sm:p-8 space-y-5 relative overflow-hidden"
+              >
+                {/* Gradient top border */}
+                <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-[#8C3F4D]/60 via-[#C6A15B] to-[#7792B5]/60" />
+
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-20"
+                  style={{ background: 'radial-gradient(circle at 100% 0%, rgba(198,161,91,0.5) 0%, transparent 70%)' }} />
+
+                {/* Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-[#7792B5]/18">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#C6A15B] animate-pulse-subtle" />
+                    <span className="font-mono text-xs uppercase tracking-wider text-[#EBE8E1] font-medium">Technical Architecture</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#DEC186] bg-[#C6A15B]/8 px-2.5 py-1 rounded-[2px] border border-[#C6A15B]/25">
+                    Interactive Blueprint
+                  </span>
+                </div>
+
+                {/* Tab grid */}
+                <div className="grid grid-cols-2 gap-1 p-1 rounded-[2px] bg-[#090B10]/60 border border-[#7792B5]/18">
+                  {focusDomains.map((domain) => {
+                    const Icon = domain.icon;
+                    const isActive = activeTab === domain.id;
+                    return (
+                      <button
+                        key={domain.id}
+                        onClick={() => setActiveTab(domain.id)}
+                        className={`flex items-center gap-2 px-2.5 py-2 rounded-[2px] text-[11px] font-mono transition-all text-left cursor-pointer ${
+                          isActive
+                            ? 'bg-[#151C2B] text-[#C6A15B] border border-[#C6A15B]/35 shadow-sm'
+                            : 'text-[#858A96] hover:text-[#D6D3CC]'
+                        }`}
+                      >
+                        <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-[#C6A15B]' : 'text-[#7792B5]'}`} />
+                        <span className="truncate">{domain.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Animated domain body */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentDomain.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.22, ease: luxuryEase }}
+                    className="space-y-4"
+                  >
+                    <p className="text-sm font-medium text-[#EBE8E1] leading-snug">{currentDomain.headline}</p>
+
+                    <div className="p-3.5 rounded-[2px] bg-[#090B10]/70 border border-[#7792B5]/18 space-y-2">
+                      <div className="text-[10px] font-mono text-[#C6A15B] uppercase tracking-wider flex items-center gap-1.5">
+                        <Terminal className="w-3 h-3" />
+                        <span>Architecture Pattern</span>
+                      </div>
+                      <p className="text-xs text-[#D6D3CC]/80 leading-relaxed">{currentDomain.architecture}</p>
+                    </div>
+
+                    <div>
+                      <div className="text-[10px] font-mono text-[#858A96] uppercase tracking-wider mb-2">Core Stack</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {currentDomain.stack.map((item) => (
+                          <span key={item} className="tag-gold text-[11px]">{item}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between text-xs font-mono border-t border-[#7792B5]/15">
+                      <span className="text-[#858A96] flex items-center gap-1.5">
+                        <FolderGit2 className="w-3.5 h-3.5 text-[#7792B5]" />
+                        <span>Key Project</span>
+                      </span>
+                      <Link
+                        href={`/projects/${currentDomain.featuredProject.slug}`}
+                        className="text-[#C6A15B] hover:text-[#DEC186] font-medium flex items-center gap-1 group transition-colors"
+                      >
+                        <span>{currentDomain.featuredProject.name}</span>
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </SpotlightCard>
+            </FadeUp>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── Scroll indicator ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-10 flex justify-between items-center text-xs font-mono text-[#858A96] relative z-10">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#C6A15B] animate-pulse" />
+          <span>NIKHIL KUMAR · MIDNIGHT LUXURY EDITION</span>
+        </div>
+        <button
+          onClick={() => scrollToSection('about')}
+          className="flex items-center gap-2 hover:text-[#C6A15B] transition-colors group cursor-pointer"
+        >
+          <span>Scroll</span>
+          <ChevronDown className="w-4 h-4 text-[#C6A15B] animate-bounce-down" />
+        </button>
+      </div>
     </section>
   );
 }

@@ -5,14 +5,15 @@ import {
   ExternalLink, 
   Github, 
   Terminal, 
-  CheckCircle2, 
+  Check, 
   AlertTriangle, 
   Layers, 
-  Cpu, 
-  ShieldAlert, 
-  BookOpen, 
   Play,
-  KeyRound
+  ArrowUpRight,
+  ShieldCheck,
+  BookOpen,
+  Cpu,
+  Code2
 } from 'lucide-react';
 import projectsData from '@/data/projects.json';
 import { ProjectRegistryItem } from '@/types/project';
@@ -38,19 +39,6 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'VERIFIED WORKING':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-      case 'SIMULATION ONLY':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/30';
-      case 'REQUIRES EXTERNAL CONFIGURATION':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-      default:
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
-    }
-  };
-
   const getModelLabel = (model: string) => {
     switch (model) {
       case 'browser-native': return 'Browser Native';
@@ -62,51 +50,60 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
     }
   };
 
+  const isVerified = project.verificationStatus === 'VERIFIED WORKING';
+
   return (
-    <div className="min-h-screen bg-dark-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#090B10] text-[#D6D3CC] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        {/* Navigation bar */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-dark-700">
+        
+        {/* Top Navigation Bar */}
+        <div className="flex items-center justify-between mb-10 pb-5 border-b border-[#C6A76B]/25">
           <Link
-            href="/#projects"
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-accent-cyan transition-colors"
+            href="/projects"
+            className="flex items-center gap-2 text-xs font-mono text-[#858A96] hover:text-[#EBE8E1] transition-colors group"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to All Projects
+            <ArrowLeft className="w-4 h-4 text-[#C6A15B] group-hover:-translate-x-0.5 transition-transform" />
+            <span>&larr; Back to Case Studies Directory</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusBadge(project.verificationStatus)}`}>
-              {project.verificationStatus}
+          <div className="flex items-center gap-2.5">
+            <span className="px-3 py-1 rounded-[2px] text-xs font-mono font-medium bg-[#151C2B] border border-[#C6A76B]/35 text-[#EBE8E1] flex items-center gap-1.5 shadow-xs">
+              <span className={`w-1.5 h-1.5 rounded-full ${isVerified ? 'bg-[#C6A76B]' : 'bg-[#72869E]'}`} />
+              <span>{project.verificationStatus}</span>
             </span>
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-dark-800 text-gray-300 border border-dark-600">
+            <span className="hidden sm:inline-block px-3 py-1 rounded-[2px] text-xs font-mono bg-[#151C2B] text-[#72869E] border border-[#7792B5]/30">
               {getModelLabel(project.executionModel)}
             </span>
           </div>
         </div>
 
-        {/* Header */}
-        <div className="mb-10">
-          <div className="text-xs uppercase font-mono tracking-wider text-accent-cyan mb-2">
-            {project.category} • Verified: {project.verificationDate}
+        {/* Project Header — Luxury Editorial Masthead */}
+        <div className="mb-12 space-y-5">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C6A76B]" />
+            <span className="text-xs font-mono uppercase tracking-luxury text-[#C6A15B]">
+              {project.category} &bull; Verified: {project.verificationDate}
+            </span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+          
+          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#EBE8E1] leading-[1.06]">
             {project.name}
           </h1>
-          <p className="text-lg text-gray-300 leading-relaxed mb-6">
+
+          <p className="text-base sm:text-xl text-[#858A96] leading-relaxed max-w-3xl font-normal">
             {project.fullDescription}
           </p>
 
           {/* Action CTAs */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 pt-2">
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-cyan to-accent-purple text-white text-sm font-semibold hover:shadow-lg hover:shadow-accent-cyan/20 transition-all"
+                className="btn-luxury-gold py-3 px-6 text-sm"
               >
-                <Play className="w-4 h-4" />
-                Launch Full-Screen Demo
+                <Play className="w-4 h-4 fill-current" />
+                <span>Launch Full-Screen Demo</span>
               </a>
             )}
             {project.githubUrl && (
@@ -114,37 +111,36 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 text-sm font-medium text-gray-200 transition-colors"
+                className="btn-luxury-secondary py-3 px-5 text-sm"
               >
-                <Github className="w-4 h-4" />
-                View GitHub Source
+                <Github className="w-4 h-4 text-[#C6A15B]" />
+                <span>View GitHub Repository</span>
               </a>
             )}
           </div>
         </div>
 
-        {/* Embedded Interactive Demo (if web demo exists) */}
+        {/* Embedded Interactive Demo */}
         {project.demoUrl && (
-          <div className="mb-12 bg-dark-800 rounded-2xl border border-dark-700 overflow-hidden shadow-2xl">
-            <div className="flex items-center justify-between px-6 py-3 bg-dark-850 border-b border-dark-700">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="ml-3 text-xs font-mono text-gray-400">
-                  Interactive Demo Preview — {project.name}
+          <div className="mb-14 rounded-[2px] bg-[#EBE8E1] border border-[#C6A76B]/35 overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-3.5 bg-[#0F1827] border-b border-[#C6A76B]/25">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#C6A76B] animate-pulse" />
+                <span className="text-xs font-mono text-[#DFCCA2]">
+                  Interactive Demo Sandbox — {project.name}
                 </span>
               </div>
               <a
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-accent-cyan hover:underline flex items-center gap-1"
+                className="text-xs text-[#DFCCA2] hover:text-[#151C2B] flex items-center gap-1 font-mono transition-colors"
               >
-                Open In New Tab <ExternalLink className="w-3 h-3" />
+                <span>Open Full Screen</span>
+                <ExternalLink className="w-3 h-3" />
               </a>
             </div>
-            <div className="relative w-full h-[620px] bg-dark-900">
+            <div className="relative w-full h-[540px] bg-black">
               <iframe
                 src={project.demoUrl}
                 title={`${project.name} Live Demo`}
@@ -156,58 +152,63 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
         )}
 
         {/* Problem & Solution Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6">
-            <div className="flex items-center gap-2 text-rose-400 font-semibold mb-3">
-              <AlertTriangle className="w-5 h-5" />
-              <h3>Problem Statement</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div className="editorial-card p-6 sm:p-8 space-y-3 border-l-2 border-l-[#72869E]">
+            <div className="flex items-center gap-2 text-[#EBE8E1]">
+              <AlertTriangle className="w-4 h-4 text-[#C6A15B]" />
+              <h3 className="text-[11px] font-mono font-bold uppercase tracking-luxury text-[#C6A15B]">Problem Statement</h3>
             </div>
-            <p className="text-sm text-gray-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#858A96] leading-relaxed">
               {project.problemStatement}
             </p>
           </div>
 
-          <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6">
-            <div className="flex items-center gap-2 text-emerald-400 font-semibold mb-3">
-              <CheckCircle2 className="w-5 h-5" />
-              <h3>Technical Solution</h3>
+          <div className="editorial-card p-6 sm:p-8 space-y-3 border-l-2 border-l-[#C6A76B]">
+            <div className="flex items-center gap-2 text-[#EBE8E1]">
+              <Check className="w-4 h-4 text-[#C6A76B]" />
+              <h3 className="text-[11px] font-mono font-bold uppercase tracking-luxury text-[#C6A15B]">Technical Solution</h3>
             </div>
-            <p className="text-sm text-gray-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#858A96] leading-relaxed">
               {project.solution}
             </p>
           </div>
         </div>
 
         {/* Architecture & Tech Stack */}
-        <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6 mb-12">
-          <div className="flex items-center gap-2 text-accent-cyan font-semibold mb-3">
-            <Layers className="w-5 h-5" />
-            <h3>Architecture & Engineering Implementation</h3>
+        <div className="editorial-card p-7 sm:p-10 mb-10 space-y-6">
+          <div className="flex items-center gap-2 pb-4 border-b border-[#7792B5]/20">
+            <div className="w-9 h-9 rounded-[2px] bg-[#EBE8E1] flex items-center justify-center text-[#C6A76B]">
+              <Layers className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-mono uppercase tracking-luxury text-[#C6A15B]">Architecture Specification</h3>
+              <span className="text-sm font-serif font-normal text-[#EBE8E1]">Engineering Implementation &amp; System Design</span>
+            </div>
           </div>
-          <p className="text-sm text-gray-300 leading-relaxed mb-6">
+
+          <p className="text-xs sm:text-sm text-[#858A96] leading-relaxed">
             {project.architecture}
           </p>
 
-          <h4 className="text-xs uppercase font-mono tracking-wider text-gray-400 mb-3">
-            Technologies & Tools
-          </h4>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.techStack.map((tech) => (
-              <span
-                key={tech}
-                className="px-3 py-1 rounded-lg text-xs font-medium bg-dark-700 text-gray-200 border border-dark-600"
-              >
-                {tech}
-              </span>
-            ))}
+          <div>
+            <h4 className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B] mb-3">
+              Technologies &amp; Libraries
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {project.techStack.map((tech) => (
+                <span key={tech} className="tag-luxury">
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
 
           {project.myContribution && (
-            <div className="border-t border-dark-700 pt-4">
-              <span className="text-xs font-semibold text-accent-purple block mb-1">
-                Author & Engineering Contribution:
+            <div className="border-t border-[#7792B5]/20 pt-5 space-y-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B]">
+                Engineering Contribution
               </span>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs sm:text-sm text-[#858A96] leading-relaxed">
                 {project.myContribution}
               </p>
             </div>
@@ -215,15 +216,21 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
 
         {/* Verified Features */}
-        <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6 mb-12">
-          <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-accent-cyan" />
-            Verified Features & Capabilities
-          </h3>
+        <div className="editorial-card p-7 sm:p-10 mb-10 space-y-5">
+          <div className="flex items-center gap-2 pb-4 border-b border-[#7792B5]/20">
+            <div className="w-9 h-9 rounded-[2px] bg-[#EBE8E1] flex items-center justify-center text-[#C6A76B]">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-mono uppercase tracking-luxury text-[#C6A15B]">Verified Capabilities</h3>
+              <span className="text-sm font-serif font-normal text-[#EBE8E1]">Confirmed Functional Features</span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {project.features.map((feature, idx) => (
-              <div key={idx} className="flex items-start gap-2.5 text-sm text-gray-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan mt-2 flex-shrink-0" />
+              <div key={idx} className="flex items-start gap-2.5 text-xs font-mono text-[#858A96] py-1.5 border-b border-[#7792B5]/10">
+                <span className="text-[#C6A76B] shrink-0 mt-0.5">&bull;</span>
                 <span>{feature}</span>
               </div>
             ))}
@@ -231,42 +238,53 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
 
         {/* Run Locally & Setup Commands */}
-        <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6 mb-12">
-          <div className="flex items-center gap-2 text-accent-purple font-semibold mb-4">
-            <Terminal className="w-5 h-5" />
-            <h3>Run Locally Instructions</h3>
+        <div className="editorial-card p-7 sm:p-10 mb-10 space-y-6">
+          <div className="flex items-center gap-2 pb-4 border-b border-[#7792B5]/20">
+            <div className="w-9 h-9 rounded-[2px] bg-[#EBE8E1] flex items-center justify-center text-[#C6A76B]">
+              <Terminal className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-mono uppercase tracking-luxury text-[#C6A15B]">Local Execution Guide</h3>
+              <span className="text-sm font-serif font-normal text-[#EBE8E1]">Run This Project on Your Machine</span>
+            </div>
           </div>
 
           {project.requirements && project.requirements.length > 0 && (
-            <div className="mb-4">
-              <span className="text-xs font-semibold text-gray-400 block mb-1">Prerequisites:</span>
-              <ul className="list-disc list-inside text-xs text-gray-300 space-y-1">
+            <div className="space-y-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B]">Prerequisites:</span>
+              <ul className="space-y-1.5">
                 {project.requirements.map((req, i) => (
-                  <li key={i}>{req}</li>
+                  <li key={i} className="flex items-start gap-2 text-xs font-mono text-[#858A96]">
+                    <Check className="w-3.5 h-3.5 text-[#C6A76B] shrink-0 mt-0.5" />
+                    <span>{req}</span>
+                  </li>
                 ))}
               </ul>
             </div>
           )}
 
           {project.setupInstructions && project.setupInstructions.length > 0 && (
-            <div className="mb-4">
-              <span className="text-xs font-semibold text-gray-400 block mb-1">Setup Steps:</span>
-              <ol className="list-decimal list-inside text-xs text-gray-300 space-y-1">
+            <div className="space-y-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B]">Setup Steps:</span>
+              <ol className="space-y-1.5">
                 {project.setupInstructions.map((step, i) => (
-                  <li key={i}>{step}</li>
+                  <li key={i} className="flex items-start gap-2.5 text-xs font-mono text-[#858A96]">
+                    <span className="text-[#C6A76B] font-semibold shrink-0 w-4">{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
                 ))}
               </ol>
             </div>
           )}
 
           {project.runCommands && project.runCommands.length > 0 && (
-            <div className="mb-4">
-              <span className="text-xs font-semibold text-gray-400 block mb-1">Execution Commands:</span>
-              <div className="bg-dark-900 rounded-xl p-4 font-mono text-xs text-accent-cyan space-y-2 border border-dark-700">
+            <div className="space-y-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B]">Execution Commands:</span>
+              <div className="bg-[#EBE8E1] rounded-[2px] p-5 font-mono text-xs text-[#151C2B] space-y-2 border border-[#C6A76B]/25 luxury-grid-dark">
                 {project.runCommands.map((cmd, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <span className="text-gray-500">$</span>
-                    <span>{cmd}</span>
+                    <span className="text-[#C6A76B] shrink-0">$</span>
+                    <span className="text-[#151C2B]/90">{cmd}</span>
                   </div>
                 ))}
               </div>
@@ -275,25 +293,29 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
 
           {/* Environment Variables Table */}
           {project.environmentVariables && project.environmentVariables.length > 0 && (
-            <div className="mt-6 border-t border-dark-700 pt-4">
-              <span className="text-xs font-semibold text-gray-400 block mb-2">Environment Variables:</span>
+            <div className="border-t border-[#7792B5]/20 pt-6 space-y-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#C6A15B]">Environment Variables:</span>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border border-dark-700">
-                  <thead className="bg-dark-900 text-gray-400 uppercase font-mono">
+                <table className="w-full text-left text-xs font-mono border border-[#7792B5]/25 rounded-[2px] overflow-hidden">
+                  <thead className="bg-[#EBE8E1] text-[#DFCCA2] uppercase">
                     <tr>
-                      <th className="p-2 border-b border-dark-700">Variable</th>
-                      <th className="p-2 border-b border-dark-700">Description</th>
-                      <th className="p-2 border-b border-dark-700">Required</th>
-                      <th className="p-2 border-b border-dark-700">Sample Value</th>
+                      <th className="p-3 border-b border-[#C6A76B]/20">Variable</th>
+                      <th className="p-3 border-b border-[#C6A76B]/20">Description</th>
+                      <th className="p-3 border-b border-[#C6A76B]/20">Required</th>
+                      <th className="p-3 border-b border-[#C6A76B]/20">Sample Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-dark-700 text-gray-300">
+                  <tbody className="divide-y divide-[#7792B5]/15 bg-[#151C2B] text-[#858A96]">
                     {project.environmentVariables.map((env, i) => (
-                      <tr key={i}>
-                        <td className="p-2 font-mono text-accent-cyan">{env.key}</td>
-                        <td className="p-2">{env.description}</td>
-                        <td className="p-2">{env.required ? 'Yes' : 'Optional'}</td>
-                        <td className="p-2 font-mono text-gray-400">{env.sampleValue}</td>
+                      <tr key={i} className="hover:bg-[#090B10] transition-colors">
+                        <td className="p-3 text-[#EBE8E1] font-semibold">{env.key}</td>
+                        <td className="p-3">{env.description}</td>
+                        <td className="p-3">
+                          <span className={`px-2 py-0.5 rounded-[2px] text-[10px] ${env.required ? 'bg-[#EBE8E1] text-[#C6A76B] border border-[#C6A76B]/40' : 'bg-[#090B10] text-[#72869E] border border-[#7792B5]/30'}`}>
+                            {env.required ? 'Required' : 'Optional'}
+                          </span>
+                        </td>
+                        <td className="p-3 text-[#72869E]">{env.sampleValue}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -303,32 +325,31 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
           )}
         </div>
 
-        {/* Limitations & Security */}
-        <div className="bg-dark-800/80 border border-dark-700 rounded-2xl p-6 mb-12">
-          <div className="flex items-center gap-2 text-amber-400 font-semibold mb-3">
-            <ShieldAlert className="w-5 h-5" />
-            <h3>Security Architecture & Known Limitations</h3>
-          </div>
-          <ul className="list-disc list-inside text-xs text-gray-300 space-y-2 leading-relaxed">
-            {project.limitations.map((lim, i) => (
-              <li key={i}>{lim}</li>
-            ))}
-            <li>Developer API keys are never stored in source code or sent to client bundles.</li>
-            <li>Visitor API keys remain strictly in browser session memory and are never persisted to databases or server logs.</li>
-          </ul>
+        {/* Footer Navigation */}
+        <div className="pt-8 border-t border-[#C6A76B]/25 flex items-center justify-between">
+          <Link
+            href="/projects"
+            className="btn-luxury-secondary py-2.5 px-5 text-sm"
+          >
+            <ArrowLeft className="w-4 h-4 text-[#C6A15B]" />
+            <span>Back to Case Studies</span>
+          </Link>
+
+          {project.demoUrl && (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-luxury-gold py-2.5 px-5 text-sm"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Launch Demo</span>
+            </a>
+          )}
         </div>
 
-        {/* Footer Back Link */}
-        <div className="text-center pt-8 border-t border-dark-800">
-          <Link
-            href="/#projects"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 text-sm font-medium text-gray-300 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Portfolio Projects
-          </Link>
-        </div>
       </div>
     </div>
   );
 }
+
