@@ -83,11 +83,27 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data?.error || 'Failed to send. Please email me directly at nikuluhach.86209@gmail.com');
+        setIsSubmitting(false);
+        return;
+      }
+    } catch {
+      alert('Network error. Please email me directly at nikuluhach.86209@gmail.com');
+      setIsSubmitting(false);
+      return;
+    }
     setIsSubmitting(false);
     setSubmitted(true);
     setFormData({ name: '', email: '', subject: 'Software Engineering Role', message: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+    setTimeout(() => setSubmitted(false), 6000);
   };
 
   return (
