@@ -49,3 +49,5 @@ build/
 # Ignore old backup folders
 frontend_backup/
 backend/
+.vercel
+.env*
